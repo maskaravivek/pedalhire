@@ -7,6 +7,10 @@ env_variables:
   SECRET_KEY: "$$key"
   SQLALCHEMY_DATABASE_URI: "postgresql://postgres:1234@localhost:5432/pedalhire"
   SUPPORT_EMAIL: "vmaskara@asu.edu"
+  SEND_GRID_API_KEY: ""
+  ENVIRONMENT: "release"
+  VERSION: "1.0"
+  SENTRY_DSN_API: ""
 
 handlers:
 
