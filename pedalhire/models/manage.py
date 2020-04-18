@@ -9,7 +9,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 # import models
 from .base import db
-from .user import User
 # create app
 app = Flask(__name__)
 app = set_app_config(app)

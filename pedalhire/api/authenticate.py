@@ -1,7 +1,6 @@
 from flask import Blueprint, request
 from flask import Flask, Response
 from functools import wraps
-from ..models.user import User
 from ..utils.api import handle_response
 
 

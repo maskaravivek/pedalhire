@@ -4,9 +4,6 @@
 import os
 import unittest
 
-from covid19 import app
-from covid19.constants.global_constants import COMMON_PREFIX
-
 TEST_DB = 'test.db'
 
 

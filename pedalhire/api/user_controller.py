@@ -1,7 +1,5 @@
 from ..constants.global_constants import COMMON_PREFIX
 from ..models.base import db
-from ..models.role import Role
-from ..models.user import User
 from ..utils.api import handle_response
 from ..services.email_service import send_email_with_template
 from .authenticate import authenticate

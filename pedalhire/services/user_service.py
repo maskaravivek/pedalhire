@@ -1,7 +1,5 @@
 from ..models.base import db
-from ..models.user import User
 from ..models.blacklist_token import BlacklistToken
-from ..models.role import Role
 from flask import abort, request
 import uuid
 from argon2 import PasswordHasher

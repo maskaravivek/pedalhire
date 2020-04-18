@@ -1,7 +1,4 @@
-from sqlalchemy import Column, String
-import enum
-from sqlalchemy.dialects.postgresql import UUID, ARRAY, JSONB
-from .role import Role
+from sqlalchemy.dialects.postgresql import UUID
 from .base import db
 from .constants import SECRET_KEY
 import jwt
@@ -9,16 +6,15 @@ import datetime
 from .serializer import CustomSerializerMixin
 from .blacklist_token import BlacklistToken
 
-class User(db.Model, CustomSerializerMixin):
-    __tablename__ = 'user'
 
-    serialize_only = ('id', 'email_id', 'role_type')
+class Login(db.Model, CustomSerializerMixin):
+    __tablename__ = 'login'
 
-    id = db.Column(UUID(as_uuid=True), primary_key=True)
+    serialize_only = ('login_id', 'email')
+
+    login_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'), db.ForeignKey('merchants.id'), primary_key=True)
     email_id = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    reset_token = db.Column(db.String(200), nullable=True)
-    role_type = db.Column(db.Enum(Role))
 
     def encode_auth_token(self, id, role_type):
         try:
