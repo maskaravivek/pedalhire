@@ -15,6 +15,8 @@ class Merchants(db.Model, CustomSerializerMixin):
     city = db.Column(db.String(200), nullable=False)
     country = db.Column(db.String(100), nullable=False)
     zip_code = db.Column(db.String(20), nullable=False)
+    latitude = db.Column(db.String(50), nullable=False)
+    longitude = db.Column(db.String(50), nullable=False)
     login_id = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False)
     modified_at = db.Column(db.DateTime(), nullable=False)
