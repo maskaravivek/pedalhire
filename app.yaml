@@ -1,0 +1,16 @@
+runtime: python37
+
+instance_class: F1
+
+env_variables:
+  BUCKET_NAME: "example-gcs-bucket"
+  SECRET_KEY: "$$key"
+  SQLALCHEMY_DATABASE_URI: "postgresql://postgres:1234@localhost:5432/pedalhire"
+  SUPPORT_EMAIL: "vmaskara@asu.edu"
+
+handlers:
+
+- url: /.*
+  secure: always
+  redirect_http_response_code: 301
+  script: auto
