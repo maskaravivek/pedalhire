@@ -9,6 +9,15 @@ from flask_sqlalchemy import SQLAlchemy
 
 # import models
 from .base import db
+from .login import Login
+from .users import Users
+from .merchants import Merchants
+from .order_status import OrderStatus
+from .product_status import ProductStatus
+from .products import Products
+from .schedule import Schedule
+from .orders import Orders
+
 # create app
 app = Flask(__name__)
 app = set_app_config(app)

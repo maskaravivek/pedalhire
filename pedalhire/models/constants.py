@@ -1,2 +1,6 @@
 import os
-SECRET_KEY = os.environ['SECRET_KEY']
+
+if os.name == 'nt':
+    SECRET_KEY = os.getenv('SECRET_KEY')
+elif os.name == 'posix':
+    SECRET_KEY = os.environ('SECRET_KEY')
