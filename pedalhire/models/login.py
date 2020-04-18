@@ -1,6 +1,6 @@
 from sqlalchemy.dialects.postgresql import UUID
 from .base import db
-from .constants import SECRET_KEY
+from ..constants.env_constants import SECRET_KEY
 import jwt
 import datetime
 from .serializer import CustomSerializerMixin

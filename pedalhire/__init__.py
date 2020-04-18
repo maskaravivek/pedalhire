@@ -6,17 +6,18 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 import sentry_sdk
 from .cache import cache
 import os
+from .constants.env_constants import SENTRY_DSN_API, ENVIRONMENT, VERSION
 
 app = Flask(__name__)
 app.config.from_pyfile('flask.cfg')
 
-dsn = os.environ.get('SENTRY_DSN_API')
+dsn = SENTRY_DSN_API
 if dsn != None:
     sentry_sdk.init(
         dsn=dsn,
         integrations=[FlaskIntegration()],
-        environment=os.environ.get('ENVIRONMENT', 'development'),
-        release=os.environ.get('VERSION')
+        environment=ENVIRONMENT,
+        release=VERSION
     )
 
 @app.errorhandler(404)

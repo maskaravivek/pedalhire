@@ -4,3 +4,4 @@ models/__pycache__/
 services/__pycache__/
 .vscode
 .pytest_cache
+.DS_Store
