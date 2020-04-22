@@ -12,9 +12,11 @@ class Login(db.Model, CustomSerializerMixin):
 
     serialize_only = ('login_id', 'email')
 
-    login_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'), db.ForeignKey('merchants.id'), primary_key=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, unique=True)
     email_id = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    users = db.relationship('Users', backref='login', uselist=False)
+    merchants = db.relationship('Merchants', backref='login', uselist=False)
 
     def encode_auth_token(self, id, role_type):
         try:

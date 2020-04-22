@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: be5a45a2f7f2
+Revision ID: c13933b72da9
 Revises: 
-Create Date: 2020-04-18 12:52:16.519761
+Create Date: 2020-04-22 16:51:28.306110
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'be5a45a2f7f2'
+revision = 'c13933b72da9'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,27 +25,43 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('token')
     )
+    op.create_table('login',
+    sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
+    sa.Column('email_id', sa.String(length=120), nullable=False),
+    sa.Column('password', sa.String(length=200), nullable=False),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email_id'),
+    sa.UniqueConstraint('id')
+    )
     op.create_table('merchants',
     sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('first_name', sa.String(length=120), nullable=False),
     sa.Column('middle_name', sa.String(length=120), nullable=True),
     sa.Column('last_name', sa.String(length=120), nullable=False),
+    sa.Column('phone_extension', sa.String(length=10), nullable=False),
+    sa.Column('phone_number', sa.String(length=20), nullable=False),
     sa.Column('merchant_photo', sa.String(length=1000), nullable=True),
     sa.Column('address', sa.String(length=1000), nullable=False),
     sa.Column('city', sa.String(length=200), nullable=False),
     sa.Column('country', sa.String(length=100), nullable=False),
     sa.Column('zip_code', sa.String(length=20), nullable=False),
-    sa.Column('login_id', sa.String(length=20), nullable=False),
+    sa.Column('latitude', sa.String(length=50), nullable=False),
+    sa.Column('longitude', sa.String(length=50), nullable=False),
+    sa.Column('login_id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('modified_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['login_id'], ['login.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('first_name')
+    sa.UniqueConstraint('first_name'),
+    sa.UniqueConstraint('login_id')
     )
     op.create_table('users',
     sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('first_name', sa.String(length=120), nullable=False),
     sa.Column('middle_name', sa.String(length=120), nullable=True),
     sa.Column('last_name', sa.String(length=120), nullable=False),
+    sa.Column('phone_extension', sa.String(length=10), nullable=False),
+    sa.Column('phone_number', sa.String(length=20), nullable=False),
     sa.Column('user_photo', sa.String(length=1000), nullable=True),
     sa.Column('address', sa.String(length=1000), nullable=False),
     sa.Column('city', sa.String(length=200), nullable=False),
@@ -54,17 +70,10 @@ def upgrade():
     sa.Column('login_id', postgresql.UUID(as_uuid=True), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('modified_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['login_id'], ['login.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('first_name')
-    )
-    op.create_table('login',
-    sa.Column('login_id', postgresql.UUID(as_uuid=True), nullable=False),
-    sa.Column('email_id', sa.String(length=120), nullable=False),
-    sa.Column('password', sa.String(length=200), nullable=False),
-    sa.ForeignKeyConstraint(['login_id'], ['merchants.id'], ),
-    sa.ForeignKeyConstraint(['login_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('login_id'),
-    sa.UniqueConstraint('email_id')
+    sa.UniqueConstraint('first_name'),
+    sa.UniqueConstraint('login_id')
     )
     op.create_table('products',
     sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
@@ -113,8 +122,8 @@ def downgrade():
     op.drop_table('schedule')
     op.drop_table('orders')
     op.drop_table('products')
-    op.drop_table('login')
     op.drop_table('users')
     op.drop_table('merchants')
+    op.drop_table('login')
     op.drop_table('blacklist_tokens')
     # ### end Alembic commands ###
