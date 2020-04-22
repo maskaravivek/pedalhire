@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/static/css/style.css" />
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <img src="/static/img/bike.jpg"><a class="navbar-brand" href="/">PedalHire</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/cart"><img class="cart" src="/static/img/cyclist.jpg">My Cart</a></li>
+                        {% if session["logged_in"] %}
+                            <li><a href="/login"> {{"Log Out"}} </a></li>
+
+                        {% else %}
+                            <li><a href="/login">{{"Log In"}}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

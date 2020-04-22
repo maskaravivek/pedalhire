@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from flask import Flask, Response
 from functools import wraps
+from ..models.login import Login
 from ..utils.api import handle_response
 
 
@@ -25,7 +26,7 @@ def authenticate(f):
                 auth_token = ''
         if auth_token:
             try:
-                user_id, role_type = User.decode_auth_token(auth_token)
+                user_id, role_type = Login.decode_auth_token(auth_token)
                 kwargs['user_id'] = user_id
                 kwargs['role_type'] = role_type
                 kwargs['auth_token'] = auth_token
@@ -42,4 +43,5 @@ def authenticate(f):
                 'message': 'Provide a valid auth token.'
             }
             return handle_response(responseObject, 401)
+
     return wrapper

@@ -16,7 +16,7 @@ user_api = Blueprint('user', __name__)
 def login_user_api():
     data = request.json
     # fetch the user data
-    user_data, auth_token  = user_service.login_user(data)
+    user_data, auth_token = user_service.login_user(data)
     return handle_response({
         "user_data": user_data,
         "auth_token": auth_token
