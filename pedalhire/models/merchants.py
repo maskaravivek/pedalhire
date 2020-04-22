@@ -10,6 +10,8 @@ class Merchants(db.Model, CustomSerializerMixin):
     first_name = db.Column(db.String(120), unique=True, nullable=False)
     middle_name = db.Column(db.String(120), nullable=True)
     last_name = db.Column(db.String(120), nullable=False)
+    phone_extension = db.Column(db.String(10), nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False)
     merchant_photo = db.Column(db.String(1000), nullable=True)
     address = db.Column(db.String(1000), nullable=False)
     city = db.Column(db.String(200), nullable=False)
