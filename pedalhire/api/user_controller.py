@@ -42,7 +42,6 @@ def logout_user_api(*args, **kwargs):
 
 
 @user_api.route(COMMON_PREFIX + "/users", methods=['GET'])
-@authenticate
 def get_all_user_api(*args, **kwargs):
     users = user_service.get_all_users()
     return handle_response(users)
