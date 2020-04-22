@@ -2,6 +2,7 @@ from .health_check_controller import health_check_api
 from .user_controller import user_api
 from .root_controller import root_api
 from .login_controller import login_api
+from .report_controller import report_api
 from flask_bootstrap import Bootstrap
 import os
 
@@ -14,4 +15,5 @@ def init_app(app):
     app.register_blueprint(user_api)
     app.register_blueprint(root_api)
     app.register_blueprint(login_api)
+    app.register_blueprint(report_api)
     print("Initiated API...")

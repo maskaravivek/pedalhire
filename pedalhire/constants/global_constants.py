@@ -1,1 +1,1 @@
-COMMON_PREFIX = ''
+COMMON_PREFIX = '/api/v1/'
