@@ -11,6 +11,9 @@ env_variables:
   ENVIRONMENT: "release"
   VERSION: "1.0"
   SENTRY_DSN_API: ""
+  QUEUE_NAME: "pedalhire-reporting-queue"
+  PROJECT_ID: "cse546-group17"
+  LOCATION: "us-central1"
 
 handlers:
 

@@ -23,6 +23,12 @@ Ref: https://cloud.google.com/appengine/docs/standard/python3/config/appref
 gcloud app deploy
 ```
 
-Deployment URL: 
+Deployment URL: https://cse546-group17.uc.r.appspot.com/
 
-https://cse546-group17.uc.r.appspot.com/
+## Creating a task
+
+```
+python pedalhire/queues/create_task.py
+```
+
+
