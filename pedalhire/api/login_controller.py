@@ -7,10 +7,12 @@ import hashlib
 import uuid
 from pedalhire.cache import cache
 from ..services import login_service
+from ..utils.api import docache
 
 login_api = Blueprint('login', __name__)
 
 @login_api.route(COMMON_PREFIX + "/login", methods=['GET'])
+@docache(minutes=5)
 def get_all_logins_api(*args, **kwargs):
     logins = login_service.get_all_logins()
-    return handle_response(logins)
+    return logins
