@@ -9,4 +9,4 @@ root_api = Blueprint('root', __name__)
 
 @root_api.route(COMMON_PREFIX + "/", methods=['GET'])
 def get_root_api():
-    return render_template('base.html')
+    return render_template('index.html')
