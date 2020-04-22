@@ -1,12 +1,12 @@
-from flask import Blueprint, render_template
+from flask import Flask, render_template
 import uuid
 import hashlib
 from ..constants.global_constants import COMMON_PREFIX
 from ..utils.api import handle_response
+from wtforms.fields import DateField
+from flask_wtf import Form
 
-root_api = Blueprint('root', __name__)
+root_api = Flask(__name__)
 
-
-@root_api.route(COMMON_PREFIX + "/", methods=['GET'])
-def get_root_api():
-    return render_template('index.html')
+if __name__ == '__main__':
+    root_api.run(debug=True)
