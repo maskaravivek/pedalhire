@@ -13,7 +13,7 @@ def register(data, role_type):
         login_id = uuid.uuid4()
         password_hash = ph.hash(data['password'])
         login = Login(id=login_id, email_id=data['email'], password=password_hash,
-                    role_type=role_type, verification_required=False)
+                    role_type=role_type)
         db.session.add(login)
         
         # generate the auth token
@@ -27,7 +27,7 @@ def login(data):
     if login and ph.verify(login.password, data['password']):
         auth_token = login.encode_auth_token(str(login.id), login.role_type.value)
         if auth_token:
-            user_data = login.get_json()
+            user_data = login.to_dict()
             return user_data, auth_token.decode()
 
 def logout(auth_token):
@@ -46,10 +46,10 @@ def update_login(update_data):
 
 def get_all_logins(**kwargs):
     results = get_login_query(**kwargs).all()
-    return [result.get_json() for result in results]
+    return [result.to_dict() for result in results]
 
 def get_login_by_id(**kwargs):
-    return get_login_data(**kwargs).get_json()
+    return get_login_data(**kwargs).to_dict()
 
 def get_login_data(**kwargs):
     return get_login_query(**kwargs).first_or_404()

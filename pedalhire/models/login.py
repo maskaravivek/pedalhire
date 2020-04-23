@@ -11,7 +11,8 @@ from .blacklist_token import BlacklistToken
 class Login(db.Model, CustomSerializerMixin):
     __tablename__ = 'login'
 
-    serialize_only = ('login_id', 'email')
+    serialize_only = ('id', 'email_id', 'role_type', 'users.id', \
+        'merchants.id')
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, unique=True)
     email_id = db.Column(db.String(120), unique=True, nullable=False)
@@ -55,13 +56,3 @@ class Login(db.Model, CustomSerializerMixin):
             raise ValueError('Signature expired. Please log in again.')
         except jwt.InvalidTokenError:
             raise ValueError('Invalid token. Please log in again.')
-
-    def get_json(self):
-        result = self.to_dict()
-        if self.role_type == Role.USER:
-            result['role_id'] = self.users.id
-        elif self.role_type == Role.MERCHANT:
-            result['role_id'] = self.merchants.id
-        del result['users']
-        del result['merchants']
-        return result

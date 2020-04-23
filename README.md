@@ -37,4 +37,4 @@ python pedalhire/queues/create_task.py
 CREATE TYPE role AS ENUM ('USER', 'MERCHANT')
 ```
 
-
+## API Docs

@@ -16,5 +16,5 @@ class Orders(db.Model, CustomSerializerMixin):
     end_date = db.Column(db.Date(), nullable=False)
     days = db.Column(ARRAY(db.String(5)), nullable=False)
     order_status = db.Column(db.Enum(OrderStatus), nullable=False)
-    created_at = db.Column(db.DateTime(), nullable=False)
-    modified_at = db.Column(db.DateTime(), nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
