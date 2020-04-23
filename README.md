@@ -38,3 +38,5 @@ CREATE TYPE role AS ENUM ('USER', 'MERCHANT')
 ```
 
 ## API Docs
+
+https://documenter.getpostman.com/view/164345/Szf9XTbi?version=latest
