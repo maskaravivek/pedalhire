@@ -1,25 +1,36 @@
-from ..constants.global_constants import COMMON_PREFIX
-from ..models.base import db
-from ..utils.api import handle_response
-from ..services.email_service import send_email_with_template
-from .authenticate import authenticate
-from argon2 import PasswordHasher
 from flask import Blueprint, request, abort, session, render_template
-import hashlib
-import uuid
-from pedalhire.cache import cache
 from ..services import user_service
+from ..utils.api import handle_response
 
 user_api = Blueprint('user', __name__)
 
 
-@user_api.route("/signin", methods=['GET', 'POST'])
-def signin_user_api():
+@user_api.route("/signin", methods=['GET'])
+def display_login():
     session["logged_in"] = False
     return render_template("login.html")
 
 
-@user_api.route("/signup", methods=['GET', 'POST'])
-def signup_user_api():
+@user_api.route("/signin", methods=["POST"])
+def process_login():
+    session["logged_in"] = False
+    data = request.json
+    print(data)
+
+
+@user_api.route("/signup", methods=['GET'])
+def display_signup():
     session["logged_in"] = False
     return render_template("signup.html")
+
+
+@user_api.route("/signup", methods=["POST"])
+def process_signup():
+    session["logged_in"] = True
+    print(request.form['firstName'])
+    return render_template("product_search.html")
+
+
+@user_api.route("/product-search", methods=['GET'])
+def product_search():
+    return render_template("product_search.html")

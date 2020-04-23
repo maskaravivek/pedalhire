@@ -1,6 +1,7 @@
 from ..models.base import db
 from ..models.blacklist_token import BlacklistToken
 from flask import abort, request
+from ..models import users
 import uuid
 from argon2 import PasswordHasher
 from .email_service import send_email
@@ -82,4 +83,4 @@ def get_user_data(**kwargs):
     return get_user_query(**kwargs).first_or_404()
 
 def get_user_query(**kwargs):
-    return User.query.filter_by(**kwargs)
+    return users.query.filter_by(**kwargs)

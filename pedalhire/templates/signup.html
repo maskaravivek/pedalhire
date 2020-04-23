@@ -2,8 +2,9 @@
 {% block content %}
 <html>
     <head>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/static/css/cover.css">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBD_qOXDY2d62rUXniuC4rgMm-TQFUtuk8&v=3.exp&sensor=false&libraries=places"></script>
         <title>PedalHire</title>
         <style>
             body {
@@ -16,6 +17,19 @@
                 color: white;
             }
         </style>
+        <script>
+            function initialize() {
+              var input = document.getElementById('address');
+              var autocomplete = new google.maps.places.Autocomplete(input);
+              google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                    var place = autocomplete.getPlace();
+                    document.getElementById('address').value = place.name;
+                    document.getElementById('latitude').value = place.geometry.location.lat();
+                    document.getElementById('longitude').value = place.geometry.location.lng();
+              });
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
     </head>
     <body>
         <div class="site-wrapper">
@@ -25,16 +39,16 @@
             <div class="cover-container">
 
               <div class="inner cover">
-                    <form class="form-signin" method="POST" width="">
+                    <form class="form-signin" method="POST">
                         <div class="text-center">
                             <h2 class="form-signin-heading">Register</h2>
                         </div>
                         <div class="row">
                             <div class="form-group col-xs-6">
-                                <input type="text" name="firstname" class="form-control" placeholder="First Name" required />
+                                <input type="text" name="firstName" class="form-control" placeholder="First Name" required />
                             </div>
                             <div class="form-group col-xs-6">
-                                <input type="text" name="lastname" class="form-control" placeholder="Last Name" required />
+                                <input type="text" name="lastName" class="form-control" placeholder="Last Name" required />
                             </div>
                         </div>
                         <div class="row">
@@ -266,7 +280,9 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-xs-12">
-                                <input type="address" name="address" class="form-control" placeholder="Address" required />
+                                <input type="text" id="address" name="address" class="form-control" placeholder="Address" required />
+                                <input type="hidden" id="latitude" name="latitude" id="latitude" class="form-control" placeholder="Latitude" required />
+                                <input type="hidden" id="longitude" name="longitude" id="longitude" class="form-control" placeholder="Longitude" required />
                             </div>
                         </div>
                         <div class="row">
@@ -277,7 +293,7 @@
                                 <input type="state" name="state" class="form-control" placeholder="State" required />
                             </div>
                             <div class="form-group col-xs-4">
-                                <input type="zipcode" name="zipcode" class="form-control" placeholder="Zip" required />
+                                <input type="zipcode" name="zipCode" class="form-control" placeholder="Zip" required />
                             </div>
                         </div>
                         <div class="row">
