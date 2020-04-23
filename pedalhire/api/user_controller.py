@@ -27,7 +27,8 @@ def display_signup():
 @user_api.route("/signup", methods=["POST"])
 def process_signup():
     session["logged_in"] = True
-    print(request.form['firstName'])
+    dict = request.form
+    user_service.register_user(dict)
     return render_template("product_search.html")
 
 

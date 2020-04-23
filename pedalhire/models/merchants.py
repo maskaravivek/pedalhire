@@ -15,6 +15,7 @@ class Merchants(db.Model, CustomSerializerMixin):
     merchant_photo = db.Column(db.String(1000), nullable=True)
     address = db.Column(db.String(1000), nullable=False)
     city = db.Column(db.String(200), nullable=False)
+    state = db.Column(db.String(200), nullable=False)
     country = db.Column(db.String(100), nullable=False)
     zip_code = db.Column(db.String(20), nullable=False)
     latitude = db.Column(db.String(50), nullable=False)

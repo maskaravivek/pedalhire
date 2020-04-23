@@ -26,9 +26,9 @@ def authenticate(f):
                 auth_token = ''
         if auth_token:
             try:
-                user_id, role_type = Login.decode_auth_token(auth_token)
+                user_id, login_id = Login.decode_auth_token(auth_token)
                 kwargs['user_id'] = user_id
-                kwargs['role_type'] = role_type
+                kwargs['login_id'] = login_id
                 kwargs['auth_token'] = auth_token
                 return f(*args, **kwargs)
             except ValueError as err:
