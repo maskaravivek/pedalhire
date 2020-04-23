@@ -22,6 +22,7 @@ def update_merchant_api(*args, **kwargs):
 
 
 @merchant_api.route(COMMON_PREFIX + "/merchants", methods=['GET'])
+@authenticate
 def get_all_merchant_api(*args, **kwargs):
     response = merchant_service.get_all_merchants()
 

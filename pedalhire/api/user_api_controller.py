@@ -22,6 +22,7 @@ def update_user_api(*args, **kwargs):
 
 
 @user_api.route(COMMON_PREFIX + "/users", methods=['GET'])
+@authenticate
 def get_all_users_api(*args, **kwargs):
     response = user_service.get_all_users()
 
