@@ -26,8 +26,8 @@ def register_user(data):
         db.session.commit()
 
         # generate the auth token
-        auth_token = user.encode_auth_token(str(user_id), user.login_id.value)
-        return user_id, auth_token.decode()
+        #auth_token = user.encode_auth_token(str(user_id))
+        #return user_id, auth_token.decode()
     else:
         raise Exception('User already exists with this email ID')
 

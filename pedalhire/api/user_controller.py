@@ -1,30 +1,30 @@
 from flask import Blueprint, request, abort, session, render_template
 from ..services import user_service
-from ..utils.api import handle_response
+from ..constants.global_constants import COMMON_PREFIX
 
 user_api = Blueprint('user', __name__)
 
 
-@user_api.route("/signin", methods=['GET'])
+@user_api.route(COMMON_PREFIX + "/login", methods=['GET'])
 def display_login():
     session["logged_in"] = False
     return render_template("login.html")
 
 
-@user_api.route("/signin", methods=["POST"])
+@user_api.route(COMMON_PREFIX + "/login", methods=["POST"])
 def process_login():
     session["logged_in"] = False
     data = request.json
     print(data)
 
 
-@user_api.route("/signup", methods=['GET'])
+@user_api.route(COMMON_PREFIX + "/registration", methods=['GET'])
 def display_signup():
     session["logged_in"] = False
-    return render_template("signup.html")
+    return render_template("registration.html")
 
 
-@user_api.route("/signup", methods=["POST"])
+@user_api.route(COMMON_PREFIX + "/registration", methods=["POST"])
 def process_signup():
     session["logged_in"] = True
     dict = request.form
