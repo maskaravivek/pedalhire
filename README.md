@@ -31,4 +31,10 @@ Deployment URL: https://cse546-group17.uc.r.appspot.com/
 python pedalhire/queues/create_task.py
 ```
 
+## Migration
+
+```
+CREATE TYPE role AS ENUM ('USER', 'MERCHANT')
+```
+
 
