@@ -15,5 +15,5 @@ class Products(db.Model, CustomSerializerMixin):
     status = db.Column(db.Enum(ProductStatus), nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False)
     modified_at = db.Column(db.DateTime(), nullable=False)
-    schedules = db.relationship('Schedule', backref='product')
-    orders = db.relationship('Orders', backref='product')
+    schedules = db.relationship('Schedule', backref='products')
+    orders = db.relationship('Orders', backref='products')

@@ -23,4 +23,4 @@ class Users(db.Model, CustomSerializerMixin):
     login_id = db.Column(UUID(as_uuid=True), db.ForeignKey('login.id'), nullable=False, unique=True)
     created_at = db.Column(db.DateTime(), nullable=False)
     modified_at = db.Column(db.DateTime(), nullable=False)
-    orders = db.relationship('Orders', backref='user', uselist=False)
+    orders = db.relationship('Orders', backref='users', uselist=False)

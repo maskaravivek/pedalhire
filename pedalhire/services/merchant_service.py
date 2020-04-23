@@ -1,22 +1,22 @@
 from ..models.base import db
-from ..models.users import Users
+from ..models.merchants import Merchants
 from ..models.role import Role
 from flask import abort
 import uuid
 from .login_service import register
 
-def create_user(data):
+def create_merchant(data):
     try: 
-        login_id, token = register(data, Role.USER)
-        user_id = uuid.uuid4()
-        user = Users(id=user_id,
+        login_id, token = register(data, Role.MERCHANT)
+        merchant_id = uuid.uuid4()
+        merchant = Merchants(id=merchant_id,
                             login_id=login_id,
                             first_name=data['first_name'],
                             middle_name=data['middle_name'],
                             last_name= data['last_name'],
                             phone_extension= data['phone_extension'],
                             phone_number=data['phone_number'],
-                            user_photo='',
+                            merchant_photo='',
                             address=data['address'],
                             city=data['city'],
                             state=data['state'],
@@ -24,10 +24,10 @@ def create_user(data):
                             zip_code=data['zip_code'],
                             latitude=data['latitude'],
                             longitude=data['longitude'])
-        db.session.add(user)
+        db.session.add(merchant)
         db.session.commit()
 
-        user_data = get_user_by_id(id=user_id)
+        user_data = get_merchant_by_id(id=merchant_id)
         user_data['auth_token'] = token
         return user_data
     except Exception as e:
@@ -35,27 +35,27 @@ def create_user(data):
         raise e
 
 
-def update_user(update_data):
-    user_id = update_data['id']
-    user = get_user_query(id=user_id)
+def update_merchant(update_data):
+    merchant_id = update_data['id']
+    merchant = get_merchant_query(id=merchant_id)
     del update_data['id']
     if 'verified' in update_data:
         del update_data['verified']
-    user.update(update_data)
+    merchant.update(update_data)
     db.session.commit()
 
-    return get_user_by_id(id=user_id)
+    return get_merchant_by_id(id=merchant_id)
 
 
-def get_all_users():
-    results = Users.query.all()
+def get_all_merchants():
+    results = Merchants.query.all()
     return [result.to_dict() for result in results]
 
-def get_user_by_id(**kwargs):
-    return get_user_data(**kwargs).to_dict()
+def get_merchant_by_id(**kwargs):
+    return get_merchant_data(**kwargs).to_dict()
 
-def get_user_data(**kwargs):
-    return get_user_query(**kwargs).first_or_404()
+def get_merchant_data(**kwargs):
+    return get_merchant_query(**kwargs).first_or_404()
 
-def get_user_query(**kwargs):
-    return Users.query.filter_by(**kwargs)
+def get_merchant_query(**kwargs):
+    return Merchants.query.filter_by(**kwargs)

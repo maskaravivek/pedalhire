@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql import UUID
 from .base import db
 from ..constants.env_constants import SECRET_KEY
+from .role import Role
 import jwt
 import datetime
 from .serializer import CustomSerializerMixin
@@ -15,6 +16,7 @@ class Login(db.Model, CustomSerializerMixin):
     id = db.Column(UUID(as_uuid=True), primary_key=True, unique=True)
     email_id = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    role_type = db.Column(db.Enum(Role))
     users = db.relationship('Users', backref='login', uselist=False)
     merchants = db.relationship('Merchants', backref='login', uselist=False)
 
@@ -56,4 +58,10 @@ class Login(db.Model, CustomSerializerMixin):
 
     def get_json(self):
         result = self.to_dict()
+        if self.role_type == Role.USER:
+            result['role_id'] = self.users.id
+        elif self.role_type == Role.MERCHANT:
+            result['role_id'] = self.merchants.id
+        del result['users']
+        del result['merchants']
         return result

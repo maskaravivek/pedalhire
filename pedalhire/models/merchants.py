@@ -23,5 +23,5 @@ class Merchants(db.Model, CustomSerializerMixin):
     login_id = db.Column(UUID(as_uuid=True), db.ForeignKey('login.id'), nullable=False, unique=True)
     created_at = db.Column(db.DateTime(), nullable=False)
     modified_at = db.Column(db.DateTime(), nullable=False)
-    products = db.relationship('Products', backref='merchant', uselist=False)
-    schedule = db.relationship('Schedule', backref='merchant', uselist=False)
+    products = db.relationship('Products', backref='merchants', uselist=False)
+    schedule = db.relationship('Schedule', backref='merchants', uselist=False)
