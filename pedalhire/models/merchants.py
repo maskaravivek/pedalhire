@@ -7,7 +7,7 @@ class Merchants(db.Model, CustomSerializerMixin):
     __tablename__ = 'merchants'
 
     id = db.Column(UUID(as_uuid=True), primary_key=True)
-    first_name = db.Column(db.String(120), unique=True, nullable=False)
+    first_name = db.Column(db.String(120), nullable=False)
     middle_name = db.Column(db.String(120), nullable=True)
     last_name = db.Column(db.String(120), nullable=False)
     phone_extension = db.Column(db.String(10), nullable=False)
