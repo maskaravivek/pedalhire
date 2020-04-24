@@ -101,10 +101,11 @@
                                     <span class="caret"></span></button>
                                     <ul class="dropdown-menu">
                                       <li><a href='/userProfile'>Profile</a></li>
+                                        <li><a href="/productSearch">Shop Now</a></li>
                                         <li><a onclick='userLogout()' href="$">Log Out</a></li>
                                     </ul>
                                 </div>
-                            {% else %}
+                            {% elif session['role'] == "MERCHANT" %}
                                 <div class="dropdown">
                                     <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown">Welcome!
                                     <span class="caret"></span></button>

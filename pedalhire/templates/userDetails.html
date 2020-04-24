@@ -1,10 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+<html>
+    <head>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/static/css/cover.css">
+        <title>PedalHire</title>
+        <style>
+            body {
+                background-color: black;
+                background-size: cover;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;*/
+            }
+        </style>
+    </head>
+    <body>
+    <div class="site-wrapper">
 
-</body>
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="inner cover">
+                <h1 class="cover-heading">User Details</h1>
+                <p class="lead">First Name : {{ response['first_name'] }}</p>
+                <p class="lead">Last Name : {{ response['last_name'] }}</p>
+                <p class="lead">Phone : +{{ response['phone_extension'] }} {{ response['phone_number'][0:3] }}-{{ response['phone_number'][3:6] }}-{{ response['phone_number'][6:10] }}</p>
+                <p class="lead">Address : {{ response['address'] }}, {{ response['city'] }}, {{ response['state'] }}, {{ response['country'] }}, {{ response['zip_code'] }}</p>
+                <p class="lead">Email : {{ response['login']['email_id'] }}</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+    </body>
 </html>
+{% endblock %}

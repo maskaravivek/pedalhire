@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template
 from .authenticate import authenticate
 from ..utils.api import handle_response
+from ..services import merchant_service
 
 merchant_view = Blueprint('merchant_view', __name__)
 
@@ -29,8 +30,9 @@ def add_product(*args, **kwargs):
 @merchant_view.route("/merchantProfile", methods=['GET'])
 @authenticate
 def display_merchant(*args, **kwargs):
+    response = merchant_service.get_merchant_by_id(login_id=kwargs['login_id'])
     if kwargs['role'] == 'MERCHANT':
-        return render_template("merchantDetails.html")
+        return render_template("merchantDetails.html", response=response)
     else:
         responseObject = {
             'status': 'fail',

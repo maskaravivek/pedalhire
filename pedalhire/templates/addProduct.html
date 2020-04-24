@@ -42,7 +42,7 @@
                         throw new Error("Could not reach the API: " + response.statusText);
                     }
                 }).then(function (data) {
-                    window.location.replace("/product-search");
+                    window.location.replace("/productSearch");
                 }).catch(function (error) {
                     console.log(error.message)
                 });
@@ -82,8 +82,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-default" onclick="onSubmit()">Sign In</button>
-                            <a href="/merchantRegistration"><button class="btn btn-default" type="button">Sign Up</button></a>
+                            <button class="btn btn-default" onclick="onSubmit()">Submit</button>
                         </div>
                     </form>
                 </div>

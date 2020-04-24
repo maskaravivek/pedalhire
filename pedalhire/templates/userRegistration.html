@@ -68,7 +68,7 @@
                         throw new Error("Could not reach the API: " + response.statusText);
                     }
                 }).then(function (data) {
-                    window.location.replace("/product-search");
+                    window.location.replace("/productSearch");
                 }).catch(function (error) {
                     console.log(error.message)
                 });

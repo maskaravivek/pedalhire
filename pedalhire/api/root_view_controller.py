@@ -29,6 +29,6 @@ def retrieve_role(*args, **kwargs):
     return handle_response(kwargs['role'])
 
 
-@root_view.route("/product-search", methods=['GET'])
+@root_view.route("/productSearch", methods=['GET'])
 def product_search():
     return render_template("product_search.html")

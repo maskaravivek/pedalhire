@@ -1,7 +1,6 @@
 from ..models.base import db
 from ..models.users import Users
 from ..models.role import Role
-from flask import abort
 import uuid
 from .login_service import register, login
 

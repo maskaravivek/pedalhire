@@ -1,6 +1,7 @@
 from flask import Blueprint, request, session, render_template
 from .authenticate import authenticate
 from ..utils.api import handle_response
+from ..services import user_service
 
 user_view = Blueprint('user_view', __name__)
 
@@ -18,8 +19,10 @@ def display_signup():
 @user_view.route("/userProfile", methods=['GET'])
 @authenticate
 def display_user(*args, **kwargs):
+    response = user_service.get_user_by_id(login_id=kwargs['login_id'])
     if kwargs['role'] == 'USER':
-        return render_template("userDetails.html")
+        print(response['first_name'])
+        return render_template("userDetails.html", response=response)
     else:
         responseObject = {
             'status': 'fail',
