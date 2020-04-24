@@ -1,9 +1,92 @@
 <html>
     <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/static/css/style.css" />
+        <script>
+        function userLogout() {
+            event.preventDefault();
+            const url = "/api/v1/userLogout";
+            const data = {
+                "email": "email"
+            };
+            const other_params = {
+                headers: { "content-type": "application/json; charset=UTF-8" },
+                body: JSON.stringify(data),
+                method: "POST",
+                mode: "cors"
+            };
+
+            fetch(url, other_params)
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error("Could not reach the API: " + response.statusText);
+                    }
+                }).then(function (data) {
+                    window.location.replace("/");
+                }).catch(function (error) {
+                    console.log(error.message)
+                });
+            return true;
+        }
+
+        function merchantLogout() {
+            event.preventDefault();
+            const url = "/api/v1/merchantLogout";
+            const data = {
+                "email": "email"
+            };
+            const other_params = {
+                headers: { "content-type": "application/json; charset=UTF-8" },
+                body: JSON.stringify(data),
+                method: "POST",
+                mode: "cors"
+            };
+
+            fetch(url, other_params)
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error("Could not reach the API: " + response.statusText);
+                    }
+                }).then(function (data) {
+                    window.location.replace("/");
+                }).catch(function (error) {
+                    console.log(error.message)
+                });
+            return true;
+        }
+
+        function custom() {
+            event.preventDefault();
+            const url = "/api/v1/retrieveRole";
+            const other_params = {
+                headers: { "content-type": "application/json; charset=UTF-8" },
+                method: "POST",
+                mode: "cors"
+            };
+
+            fetch(url, other_params)
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error("Could not reach the API: " + response.statusText);
+                    }
+                }).then(function (data) {
+                    console.log(data)
+                }).catch(function (error) {
+                    console.log(error.message)
+                });
+            return true;
+            }
+    </script>
     </head>
-    <body>
+    <body onload="custom()">
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -11,12 +94,37 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        {% if session["logged_in"] %}
-                            <li><a href="/cart"><img class="cart" src="/static/img/cyclist.jpg">My Cart</a></li>
-                            <li><a href="/login"> {{"Log Out"}} </a></li>
+                        {% if session['auth_token']%}
+                            {% if session['role'] == "USER" %}
+                                <div class="dropdown">
+                                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown">Welcome!
+                                    <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                      <li><a onclick='userProfile()' href="$">Profile</a></li>
+                                        <li><a onclick='userLogout()' href="$">Log Out</a></li>
+                                    </ul>
+                                </div>
+                            {% else %}
+                                <div class="dropdown">
+                                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown">Welcome!
+                                    <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                      <li><a onclick='merchantProfile()' href="$">Profile</a></li>
+                                        <li><a onclick='addItem()' href="$">Add Item</a></li>
+                                        <li><a onclick='merchantLogout()' href="$">Log Out</a></li>
+                                    </ul>
+                                </div>
+                            {% endif %}
 
                         {% else %}
-                            <li><a href="/login">{{"Log In"}}</a></li>
+                            <div class="dropdown">
+                                <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown">Login
+                                <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                  <li><a href="/merchantLogin">Merchant</a></li>
+                                  <li><a href="/userLogin">User</a></li>
+                                </ul>
+                            </div>
                         {% endif %}
                     </ul>
                 </div>

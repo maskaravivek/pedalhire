@@ -1,7 +1,7 @@
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, abort, session
 from .authenticate import authenticate
 from ..constants.global_constants import COMMON_PREFIX
-from ..services import user_service
+from ..services import user_service, login_service
 from ..utils.api import handle_response
 
 user_api = Blueprint('user_api', __name__)
@@ -10,7 +10,22 @@ user_api = Blueprint('user_api', __name__)
 def create_user_api(*args, **kwargs):
     data = request.json
     response = user_service.create_user(data)
+    session.permanent = True
+    session['auth_token'] = response['auth_token']
     return handle_response(response)
+
+@user_api.route(COMMON_PREFIX + "/userLogin", methods=['POST'])
+def login_user_api(*args, **kwargs):
+    data = request.json
+    login_data, token = user_service.login_user(data)
+    session['auth_token'] = token
+    return handle_response(login_data)
+
+@user_api.route(COMMON_PREFIX + "/userLogout", methods=['POST'])
+@authenticate
+def logout_user_api(*args, **kwargs):
+    session.pop('auth_token')
+    return handle_response({})
 
 @user_api.route(COMMON_PREFIX + "/user", methods=['PUT'])
 @authenticate

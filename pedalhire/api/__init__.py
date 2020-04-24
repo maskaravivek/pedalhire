@@ -1,6 +1,7 @@
 from .health_check_api_controller import health_check_api
 from .user_api_controller import user_api
 from .merchant_api_controller import merchant_api
+from .merchant_view_controller import merchant_view
 from .user_view_controller import user_view
 from .root_view_controller import root_view
 from .login_api_controller import login_api
@@ -20,4 +21,5 @@ def init_app(app):
     app.register_blueprint(login_api)
     app.register_blueprint(report_api)
     app.register_blueprint(merchant_api)
+    app.register_blueprint(merchant_view)
     print("Initiated API...")

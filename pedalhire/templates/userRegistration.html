@@ -36,7 +36,7 @@
 
         function onSubmit() {
             event.preventDefault();
-            const url = "https://cse546-group17.uc.r.appspot.com/api/v1/user";
+            const url = "/api/v1/user";
             const data = {
                 "email": document.getElementById('email').value,
                 "password": document.getElementById('password').value,
@@ -68,7 +68,7 @@
                         throw new Error("Could not reach the API: " + response.statusText);
                     }
                 }).then(function (data) {
-                    console.log(data)
+                    window.location.replace("/product-search");
                 }).catch(function (error) {
                     console.log(error.message)
                 });
@@ -629,7 +629,7 @@
                         </div>
                         <div class="text-center">
                             <button class="btn btn-default" onclick="onSubmit()">Sign Up</button>
-                            <a href="/login"><button class="btn btn-default" type="button">Sign In</button></a>
+                            <a href="/userLogin"><button class="btn btn-default" type="button">Sign In</button></a>
                         </div>
                     </form>
                 </div>

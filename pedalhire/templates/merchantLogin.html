@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+<html>
+
+<head>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/cover.css">
+    <title>PedalHire</title>
+    <style>
+        body {
+            background-color: black;
+            background-size: cover;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            */
+        }
+
+        .form-signin {
+            color: white;
+        }
+    </style>
+    <script>
+        function onSubmit() {
+            event.preventDefault();
+            const url = "/api/v1/merchantLogin";
+            const data = {
+                "email": document.getElementById('email').value,
+                'password': document.getElementById('password').value
+            };
+            const other_params = {
+                headers: { "content-type": "application/json; charset=UTF-8" },
+                body: JSON.stringify(data),
+                method: "POST",
+                mode: "cors"
+            };
+
+            fetch(url, other_params)
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error("Could not reach the API: " + response.statusText);
+                    }
+                }).then(function (data) {
+                    window.location.replace("/product-search");
+                }).catch(function (error) {
+                    console.log(error.message)
+                });
+            return true;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="site-wrapper">
+
+        <div class="site-wrapper-inner">
+
+            <div class="cover-container">
+
+                <div class="inner cover">
+                    <form class="form-signin" method="POST">
+                        <div class="text-center">
+                            <h2 class="form-signin-heading">Merchant Sign In</h2>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Email Address"
+                                    required />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Password"
+                                    required />
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-default" onclick="onSubmit()">Sign In</button>
+                            <a href="/merchantRegistration"><button class="btn btn-default" type="button">Sign Up</button></a>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>
+{% endblock %}
