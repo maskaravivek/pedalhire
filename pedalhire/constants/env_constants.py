@@ -11,6 +11,7 @@ if os.name == 'nt':
     PROJECT_ID = os.getenv('PROJECT_ID')
     LOCATION = os.getenv('LOCATION')
     QUEUE_NAME = os.getenv('QUEUE_NAME')
+    GOOGLE_CLOUD_BUCKET = os.getenv('GOOGLE_CLOUD_BUCKET')
 elif os.name == 'posix':
     SECRET_KEY = os.environ['SECRET_KEY']
     SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
@@ -22,3 +23,5 @@ elif os.name == 'posix':
     PROJECT_ID = os.environ['PROJECT_ID']
     LOCATION = os.environ['LOCATION']
     QUEUE_NAME = os.environ['QUEUE_NAME']
+    GOOGLE_CLOUD_BUCKET = os.environ['GOOGLE_CLOUD_BUCKET']
+    

@@ -7,10 +7,11 @@ import hashlib
 import uuid
 from pedalhire.cache import cache
 from ..utils.api import docache
+from ..services.report_service import generate_report
 
 report_api = Blueprint('report', __name__)
 
 @report_api.route(COMMON_PREFIX + "/generateReport", methods=['POST'])
-def generate_report():
-    print("report_api")
-    return handle_response()
+def report():
+    merchants = generate_report()
+    return handle_response(merchants)
