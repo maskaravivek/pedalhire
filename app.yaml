@@ -7,13 +7,14 @@ env_variables:
   SECRET_KEY: "$$key"
   SQLALCHEMY_DATABASE_URI: "postgres+pg8000://postgres:pedalhire@/pedalhire?unix_sock=/cloudsql/cse546-group17:us-central1:cse546sql/.s.PGSQL.5432"
   SUPPORT_EMAIL: "vmaskara@asu.edu"
-  SEND_GRID_API_KEY: ""
+  SEND_GRID_API_KEY: "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"
   ENVIRONMENT: "release"
   VERSION: "1.0"
   SENTRY_DSN_API: ""
   QUEUE_NAME: "pedalhire-reporting-queue"
   PROJECT_ID: "cse546-group17"
   LOCATION: "us-central1"
+  GOOGLE_CLOUD_BUCKET: "pedalhire"
 
 handlers:
 
