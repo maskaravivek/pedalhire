@@ -8,9 +8,9 @@ from ..utils.api import handle_response
 def authenticate(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        auth_token = session['auth_token']
-        if auth_token:
+        if session.get('auth_token'):
             try:
+                auth_token = session['auth_token']
                 login_id, role = Login.decode_auth_token(auth_token)
                 kwargs['login_id'] = login_id
                 kwargs['role'] = role
