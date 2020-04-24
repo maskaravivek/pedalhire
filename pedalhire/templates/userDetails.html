@@ -7,7 +7,7 @@
         <title>PedalHire</title>
         <style>
             body {
-                background-image: url("/static/img/cycling_background.jpg");
+                background-color: black;
                 background-size: cover;
                 -webkit-background-size: cover;
                 -moz-background-size: cover;*/
@@ -22,11 +22,12 @@
         <div class="cover-container">
 
           <div class="inner cover">
-                <h1 class="cover-heading">PedalHire</h1>
-                <p class="lead">Hire on the go!
-                <p class="lead">
-                <a href="/productSearch" class="btn btn-lg btn-default">Shop Now</a>
-                </p>
+                <h1 class="cover-heading">User Details</h1>
+                <p class="lead">First Name : {{ response['first_name'] }}</p>
+                <p class="lead">Last Name : {{ response['last_name'] }}</p>
+                <p class="lead">Phone : +{{ response['phone_extension'] }} {{ response['phone_number'][0:3] }}-{{ response['phone_number'][3:6] }}-{{ response['phone_number'][6:10] }}</p>
+                <p class="lead">Address : {{ response['address'] }}, {{ response['city'] }}, {{ response['state'] }}, {{ response['country'] }}, {{ response['zip_code'] }}</p>
+                <p class="lead">Email : {{ response['login']['email_id'] }}</p>
           </div>
 
         </div>
