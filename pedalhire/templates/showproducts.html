@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<html>
+    <head>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/static/css/cover.css">
+        <title>PedalHire</title>
+        <style>
+            body {
+                background-color: black;
+                background-size: cover;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;*/
+            }
+            .form-signin {
+                color: white;
+            }
+        </style>
+    </head>
+<body>
+        <div class="site-wrapper">
+
+          <div class="site-wrapper-inner">
+
+            <div class="cover-container">
+
+              <div class="inner cover">
+      <table border = 1>
+         {% for result in results %}
+            <tr>
+			   <th>  {{result['id']}} </th>
+               <th>  {{result['name']}} </th>
+               <th>  {{result['merchant_id']}} </th>
+               <th>  {{result['price']}} </th>
+               <th>  {{result['product_photo']}} </th>
+               <th>  {{result['status']}} </th>
+               <th>  {{result['created_at']}} </th>
+               <th>  {{result['updated_at']}} </th>
+            </tr>
+         {% endfor %}
+      </table>
+	    </div>
+
+            </div>
+
+          </div>
+
+        </div>
+   </body>
+</html>
+
+{% endblock %}

@@ -10,6 +10,6 @@ class Schedule(db.Model, CustomSerializerMixin):
     product_id = db.Column(UUID(as_uuid=True), db.ForeignKey('products.id'), nullable=False)
     start_time = db.Column(db.String(20), nullable=False)
     end_time = db.Column(db.String(20), nullable=False)
-    start_date = db.Column(db.Date(), nullable=False)
-    end_date = db.Column(db.Date(), nullable=False)
+    start_date = db.Column(db.DateTime, nullable=False)
+    end_date = db.Column(db.DateTime, nullable=False)
     days = db.Column(ARRAY(db.String(5)), nullable=False)

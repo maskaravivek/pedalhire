@@ -5,6 +5,7 @@ from .user_view_controller import user_view
 from .root_view_controller import root_view
 from .login_api_controller import login_api
 from .report_api_controller import report_api
+from .order_controller import order_api
 from flask_bootstrap import Bootstrap
 import os
 
@@ -20,4 +21,5 @@ def init_app(app):
     app.register_blueprint(login_api)
     app.register_blueprint(report_api)
     app.register_blueprint(merchant_api)
+    app.register_blueprint(order_api)
     print("Initiated API...")
