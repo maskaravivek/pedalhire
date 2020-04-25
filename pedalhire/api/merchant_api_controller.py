@@ -8,7 +8,7 @@ merchant_api = Blueprint('merchant_api', __name__)
 
 
 @merchant_api.route(COMMON_PREFIX + "/merchant", methods=['POST'])
-def create_user_api(*args, **kwargs):
+def create_merchant_api(*args, **kwargs):
     data = request.json
     response = merchant_service.create_merchant(data)
     session.permanent = True
@@ -18,7 +18,7 @@ def create_user_api(*args, **kwargs):
 
 @merchant_api.route(COMMON_PREFIX + "/merchant", methods=['PUT'])
 @authenticate
-def update_user_api(*args, **kwargs):
+def update_merchant_api(*args, **kwargs):
     abort(404)
     data = request.json
     response = merchant_service.update_merchant(data)
@@ -26,7 +26,7 @@ def update_user_api(*args, **kwargs):
 
 
 @merchant_api.route(COMMON_PREFIX + "/merchantLogin", methods=['POST'])
-def login_user_api(*args, **kwargs):
+def login_merchant_api(*args, **kwargs):
     data = request.json
     login_data, token = merchant_service.login_merchant(data)
     session['auth_token'] = token
@@ -35,6 +35,21 @@ def login_user_api(*args, **kwargs):
 
 @merchant_api.route(COMMON_PREFIX + "/merchantLogout", methods=['POST'])
 @authenticate
-def logout_user_api(*args, **kwargs):
+def logout_merchant_api(*args, **kwargs):
     session.pop('auth_token')
     return handle_response({})
+
+
+@merchant_api.route(COMMON_PREFIX + "/addProduct", methods=['POST'])
+@authenticate
+def add_product(*args, **kwargs):
+    if kwargs['role'] == 'MERCHANT':
+        data = request.json
+        response = merchant_service.add_product(data, kwargs['login_id'])
+        return handle_response(response)
+    else:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Not authorized'
+        }
+        return handle_response(responseObject, 401)

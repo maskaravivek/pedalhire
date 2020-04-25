@@ -6,6 +6,8 @@ import jwt
 import datetime
 from .serializer import CustomSerializerMixin
 from .blacklist_token import BlacklistToken
+from ..models.users import Users
+from ..models.merchants import Merchants
 
 
 class Login(db.Model, CustomSerializerMixin):

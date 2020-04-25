@@ -1,10 +1,13 @@
 from sqlalchemy.dialects.postgresql import UUID
 from .base import db
 from .serializer import CustomSerializerMixin
+from ..models.products import Products
 
 
 class Merchants(db.Model, CustomSerializerMixin):
     __tablename__ = 'merchants'
+
+    serialize_only = ('id', 'first_name', 'last_name', 'phone_extension', 'phone_number', 'address', 'city', 'state', 'country', 'zip_code', 'login_id', 'login.email_id')
 
     id = db.Column(UUID(as_uuid=True), primary_key=True)
     first_name = db.Column(db.String(120), nullable=False)
@@ -23,5 +26,4 @@ class Merchants(db.Model, CustomSerializerMixin):
     login_id = db.Column(UUID(as_uuid=True), db.ForeignKey('login.id'), nullable=False, unique=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
-    # products = db.relationship('Products', backref='merchants', uselist=False, lazy= True)
-    # schedule = db.relationship('Schedule', backref='merchants', uselist=False, lazy= True)
+    products = db.relationship('Products', backref='merchants', uselist=False, lazy= True)

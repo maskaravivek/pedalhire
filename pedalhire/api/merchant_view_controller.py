@@ -15,6 +15,7 @@ def display_login():
 def display_signup():
     return render_template("merchantRegistration.html")
 
+
 @merchant_view.route("/addProduct", methods=['GET'])
 @authenticate
 def add_product(*args, **kwargs):
@@ -26,6 +27,7 @@ def add_product(*args, **kwargs):
             'message': 'Not authorized'
         }
         return handle_response(responseObject, 401)
+
 
 @merchant_view.route("/merchantProfile", methods=['GET'])
 @authenticate

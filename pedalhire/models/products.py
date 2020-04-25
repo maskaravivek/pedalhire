@@ -2,6 +2,8 @@ from sqlalchemy.dialects.postgresql import UUID
 from .base import db
 from .serializer import CustomSerializerMixin
 from .product_status import ProductStatus
+from ..models.orders import Orders
+from ..models.schedule import Schedule
 
 
 class Products(db.Model, CustomSerializerMixin):
