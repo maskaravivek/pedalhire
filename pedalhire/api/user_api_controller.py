@@ -1,7 +1,7 @@
 from flask import Blueprint, request, abort, session
 from .authenticate import authenticate
 from ..constants.global_constants import COMMON_PREFIX
-from ..services import user_service, login_service
+from ..services import user_service, login_service, product_service
 from ..utils.api import handle_response
 
 user_api = Blueprint('user_api', __name__)
@@ -24,6 +24,12 @@ def update_user_api(*args, **kwargs):
     response = user_service.update_user(data)
     return handle_response(response)
 
+@user_api.route(COMMON_PREFIX + "/products", methods=['POST'])
+@authenticate
+def search_products(*args, **kwargs):
+    data = request.json
+    response = product_service.product_search(data['latitude'], data['longitude'], data['startDate'], data['endDate'])
+    return handle_response(response)
 
 @user_api.route(COMMON_PREFIX + "/userLogin", methods=['POST'])
 def login_user_api(*args, **kwargs):

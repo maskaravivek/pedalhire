@@ -36,8 +36,10 @@ def create_merchant(data):
         db.session.rollback()
         raise e
 
+
 def login_merchant(data):
     return login(data)
+
 
 def update_merchant(update_data):
     merchant_id = update_data['id']
@@ -73,12 +75,12 @@ def add_product(data, login_id):
         merchant_details = get_merchant_by_id(login_id=login_id)
         product_id = uuid.uuid4()
         product = Products(id=product_id,
-                             name=data['name'],
-                             description=data['description'],
-                             merchant_id=merchant_details['id'],
-                             price=data['price'],
-                             product_photo="No photo!",
-                             status=ProductStatus.AVAILABLE)
+                           name=data['name'],
+                           description=data['description'],
+                           merchant_id=merchant_details['id'],
+                           price=data['price'],
+                           product_photo="No photo!",
+                           status=ProductStatus.AVAILABLE)
         db.session.add(product)
         db.session.commit()
     except Exception as e:

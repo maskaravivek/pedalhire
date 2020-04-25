@@ -23,11 +23,14 @@ def create_product(data, merchant_id):
         db.session.rollback()
         raise e
 
+
 def get_products():
     return Products
 
+
 def login_merchant(data):
     return login(data)
+
 
 def update_product(update_data):
     product_id = update_data['id']
@@ -37,6 +40,28 @@ def update_product(update_data):
     db.session.commit()
 
     return get_product_by_id(id=product_id)
+
+
+def product_search(latitude, longitude, start_date, end_date):
+    result = db.engine.execute("SELECT p.*, s.start_date, s.end_date FROM schedule s INNER JOIN(SELECT p.*, m.distance, m.latitude, m.longitude FROM products p INNER JOIN(SELECT id, latitude, longitude, distance FROM (SELECT merchants.*, calculate_distance(merchants.latitude::numeric, merchants.longitude::numeric, {}, {}, 'K') distance FROM merchants) as m WHERE distance > 7000) m ON m.id = p.merchant_id) p ON (s.product_id = p.id) WHERE s.start_date <= '{}'::date AND s.end_date >= '{}'::date AND NOT EXISTS(SELECT * FROM orders WHERE orders.end_date >= '{}'::date AND orders.end_date <='{}'::date AND orders.product_id = p.id)".format(latitude, longitude, start_date, end_date, start_date, end_date))
+    products = []
+    for row in result:
+        product = {
+            "id": row.id,
+            "name": row.name,
+            "description": row.description,
+            "merchant_id": row.merchant_id,
+            "price": row.price,
+            "product_photo": row.product_photo,
+            "distance": row.distance,
+            "latitude": row.latitude,
+            "longitude": row.longitude,
+            "start_date": row.start_date,
+            "end_date": row.end_date
+        }
+        products.append(product)
+
+    return products
 
 
 def get_all_products():
