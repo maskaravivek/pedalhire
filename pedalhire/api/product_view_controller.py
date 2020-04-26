@@ -20,4 +20,4 @@ def display_merchant(*args, **kwargs):
 def logout_user_api(*args, **kwargs):
     response = product_service.product_search(request.args.get('latitude'), request.args.get('longitude'),
                                               request.args.get('startDate'), request.args.get('endDate'))
-    return handle_response(response)
+    return render_template('productResults.html', response=response)

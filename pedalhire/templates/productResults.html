@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block content %}
+<html>
+    <head>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/static/css/cover.css">
+        <title>PedalHire</title>
+        <style>
+            body {
+                background-color: black;
+                background-size: cover;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;*/
+            }
+
+           * {
+              box-sizing:border-box;
+            }
+
+            .row:after {
+              content: "";
+              display: table;
+              clear: both
+            }
+
+            .column-66 {
+              float: left;
+              width: 66.66666%;
+              padding: 20px;
+            }
+
+            .column-33 {
+              float: left;
+              width: 33.33333%;
+              padding: 20px;
+            }
+
+            .large-font {
+              font-size: 24px;
+            }
+
+            .xlarge-font {
+              font-size: 64px
+            }
+
+            .button {
+              border: none;
+              color: white;
+              padding: 14px 28px;
+              font-size: 16px;
+              cursor: pointer;
+              background-color: #4CAF50;
+            }
+
+            img {
+              display: block;
+              max-width: 100%;
+            }
+
+            @media screen and (max-width: 1000px) {
+              .column-66,
+              .column-33 {
+                width: 100%;
+                text-align: center;
+              }
+              img {
+                margin: auto;
+              }
+            }
+        </style>
+    </head>
+    <body>
+        {% for items in response %}
+            {% if loop.index%2 == 1 %}
+                <div style="margin-top:50px; margin-bottom:100px;" class="container">
+                  <div class="row">
+                    <div class="column-66">
+                      <h1 class="xlarge-font"><b>{{ items['name'] }}</b></h1>
+                      <h3 class="large-font" style="color:MediumSeaGreen;"><b>Distance : {{'%0.2f'| format(items['distance']|float)}}km</b></h3>
+                      <h3>{{ items['description'] }}</h3>
+                      <button class="button">Buy</button>
+                    </div>
+                    <div class="column-33">
+                        <img src="/static/img/cycling_background.jpg" width="435" height="371">
+                    </div>
+                  </div>
+                </div>
+            {% endif %}
+            {% if loop.index%2 == 0 %}
+                <div class="container" style="background-color:#f1f1f1; margin-bottom:100px;">
+                  <div class="row">
+                    <div class="column-33">
+                      <img src="/static/img/cycling_background.jpg" width="335" height="371">
+                    </div>
+                    <div class="column-66">
+                      <h1 class="xlarge-font"><b>{{ items['name'] }}</b></h1>
+                      <h3 class="large-font" style="color:MediumSeaGreen;"><b>Distance : {{'%0.2f'| format(items['distance']|float)}} km</b></h3>
+                      <h3>{{ items['description'] }}</h3>
+                      <button class="button">Buy</button>
+                    </div>
+                  </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </body>
+</html>
+{% endblock %}

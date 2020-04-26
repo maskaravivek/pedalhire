@@ -1,7 +1,6 @@
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import *
 from urllib.request import HTTPError
-import os
 import python_http_client
 from ..constants.env_constants import SUPPORT_EMAIL, SEND_GRID_API_KEY
 
