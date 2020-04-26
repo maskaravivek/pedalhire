@@ -5,6 +5,7 @@ import uuid
 from .login_service import register, login
 from ..models.product_status import ProductStatus
 from ..models.products import Products
+from ..models.schedule import Schedule
 
 
 def create_merchant(data):
@@ -82,6 +83,12 @@ def add_product(data, login_id):
                            product_photo="No photo!",
                            status=ProductStatus.AVAILABLE)
         db.session.add(product)
+        schedule_id = uuid.uuid4()
+        schedule = Schedule(id=schedule_id,
+                           product_id=product_id,
+                           start_date=data['startDateTime'],
+                           end_date=data['endDateTime'])
+        db.session.add(schedule)
         db.session.commit()
     except Exception as e:
         db.session.rollback()

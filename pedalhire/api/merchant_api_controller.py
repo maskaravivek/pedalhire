@@ -1,7 +1,7 @@
 from flask import Blueprint, request, abort, session
 from .authenticate import authenticate
 from ..constants.global_constants import COMMON_PREFIX
-from ..services import merchant_service, login_service
+from ..services import merchant_service
 from ..utils.api import handle_response
 
 merchant_api = Blueprint('merchant_api', __name__)
