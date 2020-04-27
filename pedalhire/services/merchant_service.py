@@ -88,7 +88,7 @@ def get_merchant_query(**kwargs):
 
 def add_product(data, login_id):
     try:
-        prefix = "m_"
+        prefix = "p_"
         merchant_details = get_merchant_by_id(login_id=login_id)
         product_id = uuid.uuid4()
         product = Products(id=product_id,
