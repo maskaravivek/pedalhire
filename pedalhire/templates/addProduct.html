@@ -3,7 +3,13 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/cover.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <link rel="stylesheet" href="/static/css/cover.css">
     <title>PedalHire</title>
     <style>
@@ -18,15 +24,32 @@
         .form-signin {
             color: white;
         }
+        .bootstrap-datetimepicker-widget.dropdown-menu {
+                background-color: #30363b;
+                border-color: #2b3135;
+            }
     </style>
     <script>
+        $(document).ready(function(){
+            $("#startDate").datetimepicker({
+                format: 'YYYY-MM-DD hh:mm'
+            });
+        });
+        $(document).ready(function(){
+            $("#endDate").datetimepicker({
+                format: 'YYYY-MM-DD hh:mm'
+            });
+        });
+
         function onSubmit() {
             event.preventDefault();
             const url = "/api/v1/addProduct";
             const data = {
                 "name": document.getElementById('name').value,
                 "description": document.getElementById('description').value,
-                "price": document.getElementById('price').value
+                "price": document.getElementById('price').value,
+                "startDateTime": document.getElementById('startDateTime').value,
+                "endDateTime": document.getElementById('endDateTime').value
             };
             const other_params = {
                 headers: { "content-type": "application/json; charset=UTF-8" },
@@ -80,6 +103,24 @@
                             <div class="form-group col-xs-12">
                                 <input type="price" id="price" name="price" class="form-control" placeholder="Price"
                                     required />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-6">
+                                <div class='input-group date' id='startDate'>
+                                    <input type='text' id="startDateTime" class="form-control" placeholder="Start Date"/>
+                                    <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <div class='input-group date' id='endDate'>
+                                    <input type='text' id="endDateTime" class="form-control" placeholder="End Date"/>
+                                    <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="text-center">

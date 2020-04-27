@@ -1,7 +1,4 @@
 from .merchant_service import get_all_merchants
-from flask import abort
-import uuid
-from .login_service import register
 from .email_service import send_email_with_template
 from ..utils.json_to_csv import convert_json_to_csv
 from .upload_service import upload_blob

@@ -5,8 +5,6 @@ import uuid
 from .login_service import register, login
 from ..models.product_status import ProductStatus
 from ..models.products import Products
-from ..services import memcache_service
-from ..models.schedule import Schedule
 
 
 def create_merchant(data):
@@ -44,7 +42,6 @@ def login_merchant(data):
 
 
 def update_merchant(update_data):
-    prefix = "m_"
     merchant_id = update_data['id']
     merchant = get_merchant_query(id=merchant_id)
     del update_data['id']
@@ -52,8 +49,7 @@ def update_merchant(update_data):
         del update_data['verified']
     merchant.update(update_data)
     db.session.commit()
-    key = prefix + str(merchant_id)
-    memcache_service.cache_put(key, update_data)
+
     return get_merchant_by_id(id=merchant_id)
 
 
@@ -63,23 +59,11 @@ def get_all_merchants():
 
 
 def get_merchant_by_id(**kwargs):
-    prefix = "m_"
-    key = prefix + str(kwargs['id']) 
-    exist , value = memcache_service.cache_get(key)
-    if  exist :
-        return value
-    else :
-        value = get_merchant_data(**kwargs).to_dict()
-        memcache_service.cache_put(key, value)
-        return value
+    return get_merchant_data(**kwargs).to_dict()
 
 
 def get_merchant_data(**kwargs):
-    prefix = "m_"
-    value = get_merchant_query(**kwargs).first_or_404()
-    key = prefix + str(value['id'])
-    memcache_service.cache_put(key, value)
-    return value
+    return get_merchant_query(**kwargs).first_or_404()
 
 
 def get_merchant_query(**kwargs):
@@ -88,7 +72,6 @@ def get_merchant_query(**kwargs):
 
 def add_product(data, login_id):
     try:
-        prefix = "m_"
         merchant_details = get_merchant_by_id(login_id=login_id)
         product_id = uuid.uuid4()
         product = Products(id=product_id,
@@ -99,16 +82,7 @@ def add_product(data, login_id):
                            product_photo="No photo!",
                            status=ProductStatus.AVAILABLE)
         db.session.add(product)
-        schedule_id = uuid.uuid4()
-        schedule = Schedule(id=schedule_id,
-                           product_id=product_id,
-                           start_date=data['startDateTime'],
-                           end_date=data['endDateTime'])
-        db.session.add(schedule)
         db.session.commit()
-        key = prefix + str(product_id)
-        memcache_service.cache_put(key, product)
-        
     except Exception as e:
         db.session.rollback()
         raise e

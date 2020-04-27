@@ -1,12 +1,7 @@
 from ..constants.global_constants import COMMON_PREFIX
-from ..models.base import db
-from ..models.role import Role
-from ..models.login import Login
 from ..utils.api import handle_response
 from .authenticate import authenticate
 from flask import Blueprint, request, abort
-import hashlib
-import uuid
 from ..services import login_service
 
 login_api = Blueprint('login_api', __name__)

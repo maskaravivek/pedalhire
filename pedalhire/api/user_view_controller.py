@@ -1,4 +1,4 @@
-from flask import Blueprint, request, session, render_template
+from flask import Blueprint, render_template
 from .authenticate import authenticate
 from ..utils.api import handle_response
 from ..services import user_service

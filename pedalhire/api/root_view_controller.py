@@ -1,6 +1,4 @@
 from flask import Blueprint, render_template
-import uuid
-import hashlib
 from ..constants.global_constants import COMMON_PREFIX
 from ..utils.api import handle_response
 from wtforms.fields import DateField

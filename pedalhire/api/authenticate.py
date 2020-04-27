@@ -1,8 +1,7 @@
 from flask import session
-from flask import Flask, Response
+from flask import render_template
 from functools import wraps
 from ..models.login import Login
-from ..utils.api import handle_response
 
 
 def authenticate(f):
@@ -21,12 +20,12 @@ def authenticate(f):
                     'status': 'fail',
                     'message': str(err)
                 }
-                return handle_response(responseObject, 401)
+                return render_template('index.html')
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return handle_response(responseObject, 401)
+            return render_template('index.html')
 
     return wrapper

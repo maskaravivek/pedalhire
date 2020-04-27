@@ -2,10 +2,12 @@
 {% block content %}
 <html>
     <head>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
         <link rel="stylesheet" href="/static/css/cover.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkF1YNfrj3tFx9-tgssMblWzybWIMUgyE&v=3.exp&sensor=false&libraries=places"></script>
         <title>PedalHire</title>
@@ -24,13 +26,21 @@
                 border-color: #2b3135;
                 width: 100%;
             }
+
+            .buttonLink {
+                color:black;
+            }
         </style>
         <script>
             $(document).ready(function(){
-                $("#startDateTime").datetimepicker();
+                $("#startDate").datetimepicker({
+                    format: 'YYYY-MM-DD hh:mm'
+                });
             });
             $(document).ready(function(){
-                $("#endDateTime").datetimepicker();
+                $("#endDate").datetimepicker({
+                    format: 'YYYY-MM-DD hh:mm'
+                });
             });
             function initialize() {
               var input = document.getElementById('location');
@@ -43,6 +53,15 @@
               });
             }
             google.maps.event.addDomListener(window, 'load', initialize);
+
+            function openPage() {
+                var startDateTime = document.getElementById('startDateTime').value;
+                var endDateTime = document.getElementById('endDateTime').value;
+                var latitude = document.getElementById('latitude').value;
+                var longitude = document.getElementById('longitude').value;
+                var url = "?startDate="+startDateTime+"&endDate="+endDateTime+"&latitude="+latitude+"&longitude="+longitude;
+                location.href = "/productResults"+url;
+            }
         </script>
     </head>
     <body>
@@ -56,16 +75,17 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-xs-4">
-                                <div class='input-group date' id='startDateTime'>
-                                    <input type='text' name = "startdatetime" class="form-control" />
+                                <div class='input-group date' id='startDate'>
+                                    <input type='text' id="startDateTime" class="form-control" />
                                     <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
                                 </div>
                             </div>
                             <div class="form-group col-xs-4">
-                                <div class='input-group date' id='endDateTime'>
-                                    <input type='text' name = "enddatetime" class="form-control" />
+
+                                <div class='input-group date' id='endDate'>
+                                    <input type='text' id="endDateTime" class="form-control" />
                                     <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -78,7 +98,9 @@
                             </div>
                         </div>
                         <div class="text-center">
-						    <input type = "submit" value = "submit" />			    
+
+                            <a class = 'buttonLink' id="submit" href="javascript:openPage()"><button class="btn btn-default" type="button">Lets go!</button></a>
+
                         </div>
 						<a href="/showproducts"><button class="btn btn-default" type="button">Lets go!</button></a>
                 </form>
