@@ -1,5 +1,5 @@
-from google.cloud import storage
 from ..constants.env_constants import GOOGLE_CLOUD_BUCKET
+from google.cloud import storage
 
 
 def upload_blob(source_file_name, destination_blob_name):

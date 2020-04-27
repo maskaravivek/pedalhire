@@ -6,7 +6,11 @@ from .user_view_controller import user_view
 from .root_view_controller import root_view
 from .login_api_controller import login_api
 from .report_api_controller import report_api
+<<<<<<< HEAD
+from .order_controller import order_api
+=======
 from .product_view_controller import product_view
+>>>>>>> 67fa45a487cd4e52e08260c2f918fc3e7614dea9
 from flask_bootstrap import Bootstrap
 import os
 

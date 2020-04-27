@@ -2,6 +2,8 @@ from sqlalchemy.dialects.postgresql import UUID
 from .base import db
 from .serializer import CustomSerializerMixin
 from .product_status import ProductStatus
+from ..models.orders import Orders
+from ..models.schedule import Schedule
 
 
 class Products(db.Model, CustomSerializerMixin):
@@ -9,6 +11,7 @@ class Products(db.Model, CustomSerializerMixin):
 
     id = db.Column(UUID(as_uuid=True), primary_key=True)
     name = db.Column(db.String(300), nullable=False)
+    description = db.Column(db.String(1000), nullable=False)
     merchant_id = db.Column(UUID(as_uuid=True), db.ForeignKey('merchants.id'), nullable=False)
     price = db.Column(db.Float(), nullable=False)
     product_photo = db.Column(db.String(1000), nullable=True)

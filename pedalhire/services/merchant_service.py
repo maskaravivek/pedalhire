@@ -1,29 +1,32 @@
 from ..models.base import db
 from ..models.merchants import Merchants
 from ..models.role import Role
-from flask import abort
 import uuid
-from .login_service import register
+from .login_service import register, login
+from ..models.product_status import ProductStatus
+from ..models.products import Products
+from ..services import memcache_service
+
 
 def create_merchant(data):
-    try: 
+    try:
         login_id, token = register(data, Role.MERCHANT)
         merchant_id = uuid.uuid4()
         merchant = Merchants(id=merchant_id,
-                            login_id=login_id,
-                            first_name=data['first_name'],
-                            middle_name=data['middle_name'],
-                            last_name= data['last_name'],
-                            phone_extension= data['phone_extension'],
-                            phone_number=data['phone_number'],
-                            merchant_photo='',
-                            address=data['address'],
-                            city=data['city'],
-                            state=data['state'],
-                            country=data['country'],
-                            zip_code=data['zip_code'],
-                            latitude=data['latitude'],
-                            longitude=data['longitude'])
+                             login_id=login_id,
+                             first_name=data['first_name'],
+                             middle_name=data['middle_name'],
+                             last_name=data['last_name'],
+                             phone_extension=data['phone_extension'],
+                             phone_number=data['phone_number'],
+                             merchant_photo='',
+                             address=data['address'],
+                             city=data['city'],
+                             state=data['state'],
+                             country=data['country'],
+                             zip_code=data['zip_code'],
+                             latitude=data['latitude'],
+                             longitude=data['longitude'])
         db.session.add(merchant)
         db.session.commit()
 
@@ -35,7 +38,12 @@ def create_merchant(data):
         raise e
 
 
+def login_merchant(data):
+    return login(data)
+
+
 def update_merchant(update_data):
+    prefix = "m_"
     merchant_id = update_data['id']
     merchant = get_merchant_query(id=merchant_id)
     del update_data['id']
@@ -43,7 +51,8 @@ def update_merchant(update_data):
         del update_data['verified']
     merchant.update(update_data)
     db.session.commit()
-
+    key = prefix + str(merchant_id)
+    memcache_service.cache_put(key, update_data)
     return get_merchant_by_id(id=merchant_id)
 
 
@@ -51,11 +60,48 @@ def get_all_merchants():
     results = Merchants.query.all()
     return [result.to_dict() for result in results]
 
+
 def get_merchant_by_id(**kwargs):
-    return get_merchant_data(**kwargs).to_dict()
+    prefix = "m_"
+    key = prefix + str(kwargs['id']) 
+    exist , value = memcache_service.cache_get(key)
+    if  exist :
+        return value
+    else :
+        value = get_merchant_data(**kwargs).to_dict()
+        memcache_service.cache_put(key, value)
+        return value
+
 
 def get_merchant_data(**kwargs):
-    return get_merchant_query(**kwargs).first_or_404()
+    prefix = "m_"
+    value = get_merchant_query(**kwargs).first_or_404()
+    key = prefix + str(value['id'])
+    memcache_service.cache_put(key, value)
+    return value
+
 
 def get_merchant_query(**kwargs):
     return Merchants.query.filter_by(**kwargs)
+
+
+def add_product(data, login_id):
+    try:
+        prefix = "m_"
+        merchant_details = get_merchant_by_id(login_id=login_id)
+        product_id = uuid.uuid4()
+        product = Products(id=product_id,
+                           name=data['name'],
+                           description=data['description'],
+                           merchant_id=merchant_details['id'],
+                           price=data['price'],
+                           product_photo="No photo!",
+                           status=ProductStatus.AVAILABLE)
+        db.session.add(product)
+        db.session.commit()
+        key = prefix + str(product_id)
+        memcache_service.cache_put(key, product)
+        
+    except Exception as e:
+        db.session.rollback()
+        raise e

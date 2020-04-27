@@ -8,6 +8,11 @@ class Schedule(db.Model, CustomSerializerMixin):
 
     id = db.Column(UUID(as_uuid=True), primary_key=True)
     product_id = db.Column(UUID(as_uuid=True), db.ForeignKey('products.id'), nullable=False)
+<<<<<<< HEAD
+    start_time = db.Column(db.String(20), nullable=False)
+    end_time = db.Column(db.String(20), nullable=False)
+=======
+>>>>>>> 67fa45a487cd4e52e08260c2f918fc3e7614dea9
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
     days = db.Column(ARRAY(db.String(5)), nullable=False)

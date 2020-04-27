@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql import UUID
 from .base import db
 from .serializer import CustomSerializerMixin
+from ..models.orders import Orders
 
 
 class Users(db.Model, CustomSerializerMixin):
@@ -23,4 +24,4 @@ class Users(db.Model, CustomSerializerMixin):
     login_id = db.Column(UUID(as_uuid=True), db.ForeignKey('login.id'), nullable=False, unique=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
-    # orders = db.relationship('Orders', backref='users', lazy= True)
+    orders = db.relationship('Orders', backref='users')

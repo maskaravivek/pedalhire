@@ -6,6 +6,8 @@ import jwt
 import datetime
 from .serializer import CustomSerializerMixin
 from .blacklist_token import BlacklistToken
+from ..models.users import Users
+from ..models.merchants import Merchants
 
 
 class Login(db.Model, CustomSerializerMixin):
@@ -24,7 +26,7 @@ class Login(db.Model, CustomSerializerMixin):
     def encode_auth_token(self, id, role_type):
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7, seconds=0),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=31, seconds=0),
                 'iat': datetime.datetime.utcnow(),
                 'sub': id,
                 'role': role_type

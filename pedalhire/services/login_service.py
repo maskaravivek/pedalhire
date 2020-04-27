@@ -4,6 +4,7 @@ from flask import abort, request
 from argon2 import PasswordHasher
 import uuid
 from ..models.blacklist_token import BlacklistToken
+from ..services import memcache_service
 
 ph = PasswordHasher()
 
@@ -35,13 +36,15 @@ def logout(auth_token):
     db.session.add(blacklist_token)
     db.session.commit()
 
-def update_login(update_data):    
+def update_login(update_data):
+    prefix = "l_"    
     login_id = update_data['id']
     login = get_login_query(id=login_id)
     del update_data['id']
     login.update(update_data)
     db.session.commit()
-
+    key = prefix + str(login_id)
+    memcache_service.cache_put(key, update_data)
     return get_login_by_id(id=login_id)
 
 def get_all_logins(**kwargs):
@@ -49,10 +52,22 @@ def get_all_logins(**kwargs):
     return [result.to_dict() for result in results]
 
 def get_login_by_id(**kwargs):
-    return get_login_data(**kwargs).to_dict()
+    prefix = "l_"
+    key = prefix + str(kwargs['id']) 
+    exist , value = memcache_service.cache_get(key)
+    if  exist :
+        return value
+    else :
+         value = get_login_data(**kwargs).to_dict()
+         memcache_service.cache_put(key, value)
+         return value
 
 def get_login_data(**kwargs):
-    return get_login_query(**kwargs).first_or_404()
+    prefix = "l_"
+    value = get_login_query(**kwargs).first_or_404()
+    key = prefix + str(value['id'])
+    memcache_service.cache_put(key, value)
+    return value
 
 def get_login_query(**kwargs):
     return Login.query.filter_by(**kwargs)
