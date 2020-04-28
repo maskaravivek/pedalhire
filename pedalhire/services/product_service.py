@@ -65,7 +65,7 @@ def product_search(latitude, longitude, start_date, end_date):
             "start_date": row.start_date,
             "end_date": row.end_date
         }
-        key = prefix + str(row.id)
+        key = prefix + str(row.latitude)+str(row.longitude)+str(start_date)+str(end_date)
         memcache_service.cache_put(key, product)
         products.append(product)
 
