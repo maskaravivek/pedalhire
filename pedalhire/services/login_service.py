@@ -52,21 +52,23 @@ def get_all_logins(**kwargs):
 
 def get_login_by_id(**kwargs):
     prefix = "l_"
-    key = prefix + str(kwargs['id']) 
-    exist , value = memcache_service.cache_get(key)
-    if  exist :
+    if 'id' in kwargs:
+     key = prefix + str(kwargs['id'])
+     exist , value = memcache_service.cache_get(key)
+     if  exist :
         return value
-    else :
+     else :
          value = get_login_data(**kwargs).to_dict()
          memcache_service.cache_put(key, value)
          return value
+    else : 
+     return get_login_data(**kwargs).to_dict()
+    
 
 def get_login_data(**kwargs):
-    prefix = "l_"
-    value = get_login_query(**kwargs).first_or_404()
-    key = prefix + str(value['id'])
-    memcache_service.cache_put(key, value)
-    return value
+   
+    return get_login_query(**kwargs).first_or_404()
+       
 
 def get_login_query(**kwargs):
     return Login.query.filter_by(**kwargs)

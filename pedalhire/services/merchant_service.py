@@ -64,31 +64,37 @@ def get_all_merchants():
 
 def get_merchant_by_id(**kwargs):
     prefix = "m_"
-    key = prefix + str(kwargs['id']) 
-    exist , value = memcache_service.cache_get(key)
-    if  exist :
+    if 'id' in kwargs:
+     key = prefix + str(kwargs['id']) 
+     exist , value = memcache_service.cache_get(key)
+     if  exist :
         return value
-    else :
-        value = get_merchant_data(**kwargs).to_dict()
+     else :
+        value = get_merchant_data(**kwargs).to_dict() 
         memcache_service.cache_put(key, value)
         return value
-
+    elif 'login_id' in kwargs:
+         key = prefix + str(kwargs['login_id']) 
+         exist , value = memcache_service.cache_get(key)
+         if  exist :
+           return value
+         else :
+           value = get_merchant_data(**kwargs).to_dict() 
+           memcache_service.cache_put(key, value)
+           return value
+    else:
+        return get_merchant_data(**kwargs).to_dict()
+    
 
 def get_merchant_data(**kwargs):
-    prefix = "m_"
-    value = get_merchant_query(**kwargs).first_or_404()
-    key = prefix + str(value['id'])
-    memcache_service.cache_put(key, value)
-    return value
-
-
+    return get_merchant_query(**kwargs).first_or_404()
+    
 def get_merchant_query(**kwargs):
     return Merchants.query.filter_by(**kwargs)
 
 
 def add_product(data, login_id):
     try:
-        prefix = "p_"
         merchant_details = get_merchant_by_id(login_id=login_id)
         product_id = uuid.uuid4()
         product = Products(id=product_id,
@@ -106,8 +112,7 @@ def add_product(data, login_id):
                            end_date=data['endDateTime'])
         db.session.add(schedule)
         db.session.commit()
-        key = prefix + str(product_id)
-        memcache_service.cache_put(key, product)
+        
         
     except Exception as e:
         db.session.rollback()

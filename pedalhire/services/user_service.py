@@ -60,20 +60,24 @@ def get_all_users():
 
 def get_user_by_id(**kwargs):
     prefix = "u_"
-    key = prefix + str(kwargs['id'])
-    exist , value = memcache_service.cache_get(key)
-    if  exist :
-        return value
-    else :
+    if kwargs['id'] is not None:
+       key = prefix + str(kwargs['id'])
+       exist , value = memcache_service.cache_get(key)
+       if  exist :
+           return value
+       else :
          value = get_user_data(**kwargs).to_dict()
          memcache_service.cache_put(key, value)
          return value
+    else:
+       return get_user_data(**kwargs).to_dict()  
 
 def get_user_data(**kwargs):
     prefix = "u_"
     value = get_user_query(**kwargs).first_or_404()
-    key = prefix + str(value['id'])
-    memcache_service.cache_put(key, value)
+    if value['id'] is not None:
+       key = prefix + str(value['id'])
+       memcache_service.cache_put(key, value)
     return value 
 
 
