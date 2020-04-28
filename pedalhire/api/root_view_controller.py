@@ -18,6 +18,9 @@ def get_root_view():
     form = MyForm()
     return render_template('index.html', form=form)
 
+@root_view.route('/_ah/warmup')
+def warmup():
+    return '', 200, {}
 
 @root_view.route(COMMON_PREFIX + '/retrieveRole', methods=['POST'])
 @authenticate

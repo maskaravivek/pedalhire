@@ -8,7 +8,7 @@ This installs the Flask API's dependencies. You now have to _configure the datab
 
 ```
 export $(cat .env | xargs)
-
+python3 -m pedalhire.models.manage db init
 python3 -m pedalhire.models.manage db migrate
 python3 -m pedalhire.models.manage db upgrade
 ```
