@@ -16,8 +16,8 @@ class Products(db.Model, CustomSerializerMixin):
     price = db.Column(db.Float(), nullable=False)
     product_photo = db.Column(db.String(1000), nullable=True)
     status = db.Column(db.Enum(ProductStatus), nullable=False)
-    created_at = db.Column(db.Date(), server_default=db.func.now())
-    updated_at = db.Column(db.Date(), server_default=db.func.now(), server_onupdate=db.func.now())
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     schedules = db.relationship('Schedule', backref='products')
     orders = db.relationship('Orders', backref='products')
 

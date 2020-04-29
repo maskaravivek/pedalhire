@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Apr 26 15:54:45 2020
-
-@author: Sudesh
-"""
-
 import redis
 import os
 import json
