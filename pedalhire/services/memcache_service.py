@@ -14,12 +14,11 @@ class UUIDEncoder(json.JSONEncoder):
            return obj.__str__()
         return json.JSONEncoder.default(self, obj)
     
-    
+redis_host = os.environ.get('REDISHOST', 'localhost')
+redis_port = int(os.environ.get('REDISPORT', 6379))
+redis_client = redis.Redis(host=redis_host, port=redis_port)
 
 def cache_put(key,data):
-    redis_host = os.environ.get('REDISHOST', 'localhost')
-    redis_port = int(os.environ.get('REDISPORT', 6379))
-    redis_client = redis.Redis(host=redis_host, port=redis_port)
     key = str(key)
     check = redis_client.set(key , json.dumps(data, cls=UUIDEncoder))
     if check :
@@ -29,9 +28,6 @@ def cache_put(key,data):
     
 
 def cache_get(key):
-    redis_host = os.environ.get('REDISHOST', 'localhost')
-    redis_port = int(os.environ.get('REDISPORT', 6379))
-    redis_client = redis.Redis(host=redis_host, port=redis_port)
     key = str(key)
     check = redis_client.exists(key)
     if check :
@@ -43,9 +39,6 @@ def cache_get(key):
     
 
 def cache_delete(key):
-    redis_host = os.environ.get('REDISHOST', 'localhost')
-    redis_port = int(os.environ.get('REDISPORT', 6379))
-    redis_client = redis.Redis(host=redis_host, port=redis_port)
     key = str(key)
     check = redis_client.exists(key)
     if check :
@@ -54,9 +47,6 @@ def cache_delete(key):
        print("no such" + key + " key exists")
      
 def cache_put_list(key, data):
-    redis_host = os.environ.get('REDISHOST', 'localhost')
-    redis_port = int(os.environ.get('REDISPORT', 6379))
-    redis_client = redis.Redis(host=redis_host, port=redis_port)
     key = str(key)
     print(key, flush = True)
     check = redis_client.lpush(key , json.dumps(data, cls=UUIDEncoder))
@@ -67,9 +57,6 @@ def cache_put_list(key, data):
        
 
 def cache_get_list(key):
-    redis_host = os.environ.get('REDISHOST', 'localhost')
-    redis_port = int(os.environ.get('REDISPORT', 6379))
-    redis_client = redis.Redis(host=redis_host, port=redis_port)
     key = str(key)
     l = redis_client.llen(key)
     print(key, flush = True)
