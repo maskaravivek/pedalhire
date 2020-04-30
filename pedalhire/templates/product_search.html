@@ -59,7 +59,7 @@
                 var endDateTime = document.getElementById('endDateTime').value;
                 var latitude = document.getElementById('latitude').value;
                 var longitude = document.getElementById('longitude').value;
-                var url = "?startDate="+startDateTime+"&endDate="+endDateTime+"&latitude="+latitude+"&longitude="+longitude;
+                var url = "?authToken="+localStorage.getItem("auth_token")+"&startDate="+startDateTime+"&endDate="+endDateTime+"&latitude="+latitude+"&longitude="+longitude;
                 location.href = "/productResults"+url;
             }
         </script>

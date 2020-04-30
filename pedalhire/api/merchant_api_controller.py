@@ -11,9 +11,7 @@ merchant_api = Blueprint('merchant_api', __name__)
 def create_merchant_api(*args, **kwargs):
     data = request.json
     response = merchant_service.create_merchant(data)
-    session.permanent = True
-    session['auth_token'] = response['auth_token']
-    return handle_response(response)
+    return handle_response(response['auth_token'])
 
 
 @merchant_api.route(COMMON_PREFIX + "/merchant", methods=['PUT'])
@@ -29,20 +27,19 @@ def update_merchant_api(*args, **kwargs):
 def login_merchant_api(*args, **kwargs):
     data = request.json
     login_data, token = merchant_service.login_merchant(data)
-    session['auth_token'] = token
-    return handle_response(login_data)
+    return handle_response(token)
 
 
 @merchant_api.route(COMMON_PREFIX + "/merchantLogout", methods=['POST'])
 @authenticate
 def logout_merchant_api(*args, **kwargs):
-    session.pop('auth_token')
     return handle_response({})
 
 
 @merchant_api.route(COMMON_PREFIX + "/addProduct", methods=['POST'])
 @authenticate
 def add_product(*args, **kwargs):
+    print(kwargs)
     if kwargs['role'] == 'MERCHANT':
         data = request.json
         response = merchant_service.add_product(data, kwargs['login_id'])

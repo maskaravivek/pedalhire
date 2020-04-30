@@ -1,35 +1,32 @@
 from flask import Blueprint, render_template
 from ..constants.global_constants import COMMON_PREFIX
 from ..utils.api import handle_response
-from wtforms.fields import DateField
-from flask import session
-from flask_wtf import Form
 from .authenticate import authenticate
 
 root_view = Blueprint('Main Page', __name__)
 
 
-class MyForm(Form):
-    date = DateField(id='datepick')
-
-
 @root_view.route('/', methods=['POST', 'GET'])
 def get_root_view():
-    form = MyForm()
-    return render_template('index.html', form=form)
+    return render_template('index.html')
+
 
 @root_view.route('/_ah/warmup')
 def warmup():
     return '', 200, {}
 
+
 @root_view.route(COMMON_PREFIX + '/retrieveRole', methods=['POST'])
 @authenticate
 def retrieve_role(*args, **kwargs):
-    print(kwargs)
-    session['role'] = kwargs['role']
-    return handle_response(kwargs['role'])
+    if 'role' not in kwargs:
+        return handle_response("None")
+    else:
+        role = kwargs['role']
+        return handle_response(role)
 
 
 @root_view.route("/productSearch", methods=['GET'])
-def product_search():
+@authenticate
+def product_search(*args, **kwargs):
     return render_template("product_search.html")

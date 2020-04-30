@@ -28,7 +28,7 @@
                 "password": document.getElementById('password').value
             };
             const other_params = {
-                headers: { "content-type": "application/json; charset=UTF-8" },
+                headers: { "content-type": "application/json; charset=UTF-8"},
                 body: JSON.stringify(data),
                 method: "POST",
                 mode: "cors"
@@ -42,7 +42,8 @@
                         throw new Error("Could not reach the API: " + response.statusText);
                     }
                 }).then(function (data) {
-                    window.location.replace("/merchantProfile");
+                    localStorage.setItem("auth_token", data);
+                    window.location.replace("/");
                 }).catch(function (error) {
                     console.log(error.message)
                 });
