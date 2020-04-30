@@ -7,7 +7,7 @@ from .order_status import OrderStatus
 class Orders(db.Model, CustomSerializerMixin):
     __tablename__ = 'orders'
 
-    serialize_only = ('id', 'product_id', 'user_id', 'start_date', 'end_date', 'order_status')
+    serialize_only = ('id', 'product_id', 'user_id', 'start_date', 'end_date', 'order_status', 'products.name', 'products.description')
 
     id = db.Column(UUID(as_uuid=True), primary_key=True)
     product_id = db.Column(UUID(as_uuid=True), db.ForeignKey('products.id'), nullable=False)
