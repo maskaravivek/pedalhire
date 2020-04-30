@@ -19,7 +19,9 @@ def display_signup():
 @user_view.route("/userProfile", methods=['GET'])
 @authenticate
 def display_user(*args, **kwargs):
+    print('Came')
     response = user_service.get_user_by_id(login_id=kwargs['login_id'])
+    print('Hello : ', kwargs)
     if kwargs['role'] == 'USER':
         print(response['first_name'])
         return render_template("userDetails.html", response=response)

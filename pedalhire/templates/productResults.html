@@ -20,7 +20,7 @@
             .row:after {
               content: "";
               display: table;
-              clear: both
+              clear: both;
             }
 
             .column-66 {
@@ -55,6 +55,8 @@
             img {
               display: block;
               max-width: 100%;
+              border: 10px  solid white;
+              border-radius: 50%;
             }
 
             @media screen and (max-width: 1000px) {
@@ -87,7 +89,7 @@
                 </div>
             {% endif %}
             {% if loop.index%2 == 0 %}
-                <div class="container" style="background-color:#f1f1f1; margin-bottom:100px;">
+                <div class="container" style="margin-bottom:100px;">
                   <div class="row">
                     <div class="column-33">
                       <img src="/static/img/cycling_background.jpg" width="335" height="371">

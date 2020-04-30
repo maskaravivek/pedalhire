@@ -68,7 +68,8 @@
                         throw new Error("Could not reach the API: " + response.statusText);
                     }
                 }).then(function (data) {
-                    window.location.replace("/productSearch");
+                    localStorage.setItem("auth_token", data);
+                    window.location.replace("/");
                 }).catch(function (error) {
                     console.log(error.message)
                 });

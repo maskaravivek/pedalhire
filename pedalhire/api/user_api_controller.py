@@ -11,9 +11,7 @@ user_api = Blueprint('user_api', __name__)
 def create_user_api(*args, **kwargs):
     data = request.json
     response = user_service.create_user(data)
-    session.permanent = True
-    session['auth_token'] = response['auth_token']
-    return handle_response(response)
+    return handle_response(response['auth_token'])
 
 
 @user_api.route(COMMON_PREFIX + "/user", methods=['PUT'])
@@ -37,12 +35,16 @@ def search_products(*args, **kwargs):
 def login_user_api(*args, **kwargs):
     data = request.json
     login_data, token = user_service.login_user(data)
-    session['auth_token'] = token
-    return handle_response(login_data)
+    return handle_response(token)
 
 
 @user_api.route(COMMON_PREFIX + "/userLogout", methods=['POST'])
 @authenticate
 def logout_user_api(*args, **kwargs):
-    session.pop('auth_token')
+    return handle_response({})
+
+
+@user_api.route(COMMON_PREFIX + "/purchase", methods=['POST'])
+@authenticate
+def purchase_product(*args, **kwargs):
     return handle_response({})

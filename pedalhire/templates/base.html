@@ -9,7 +9,7 @@
             event.preventDefault();
             const url = "/api/v1/userLogout";
             const data = {
-                "email": "email"
+                "token": localStorage.getItem("auth_token")
             };
             const other_params = {
                 headers: { "content-type": "application/json; charset=UTF-8" },
@@ -21,11 +21,12 @@
             fetch(url, other_params)
                 .then(function (response) {
                     if (response.ok) {
-                        return response.json();
+                        return response;
                     } else {
                         throw new Error("Could not reach the API: " + response.statusText);
                     }
                 }).then(function (data) {
+                    localStorage.removeItem("auth_token");
                     window.location.replace("/");
                 }).catch(function (error) {
                     console.log(error.message)
@@ -37,10 +38,39 @@
             event.preventDefault();
             const url = "/api/v1/merchantLogout";
             const data = {
-                "email": "email"
+                "token": localStorage.getItem("auth_token")
             };
             const other_params = {
                 headers: { "content-type": "application/json; charset=UTF-8" },
+                body: JSON.stringify(data),
+                method: "POST",
+                mode: "cors"
+            };
+
+            fetch(url, other_params)
+                .then(function (response) {
+                    if (response.ok) {
+                        return response;
+                    } else {
+                        throw new Error("Could not reach the API: " + response.statusText);
+                    }
+                }).then(function (data) {
+                    localStorage.removeItem("auth_token");
+                    window.location.replace("/");
+                }).catch(function (error) {
+                    console.log(error.message)
+                });
+            return true;
+        }
+
+        function custom() {
+            event.preventDefault();
+            const url = "/api/v1/retrieveRole";
+            const data = {
+                "token": localStorage.getItem("auth_token")
+            };
+            const other_params = {
+                headers: { "content-type": "application/json; charset=UTF-8", "token": localStorage.getItem("auth_token")},
                 body: JSON.stringify(data),
                 method: "POST",
                 mode: "cors"
@@ -54,35 +84,25 @@
                         throw new Error("Could not reach the API: " + response.statusText);
                     }
                 }).then(function (data) {
-                    window.location.replace("/");
+                    console.log(data);
+                    if (data=='USER') {
+                        document.getElementById("user").style.display = "inline";
+                     }
+                     else if (data=='MERCHANT') {
+                        document.getElementById("merchant").style.display = "inline";
+                     }
+                     else {
+                        document.getElementById("normal").style.display = "inline";
+                     }
                 }).catch(function (error) {
                     console.log(error.message)
                 });
             return true;
-        }
+            }
 
-        function custom() {
-            event.preventDefault();
-            const url = "/api/v1/retrieveRole";
-            const other_params = {
-                headers: { "content-type": "application/json; charset=UTF-8" },
-                method: "POST",
-                mode: "cors"
-            };
-
-            fetch(url, other_params)
-                .then(function (response) {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error("Could not reach the API: " + response.statusText);
-                    }
-                }).then(function (data) {
-                    console.log(data)
-                }).catch(function (error) {
-                    console.log(error.message)
-                });
-            return true;
+            function sendAuthToken(mainUrl) {
+                var url = "?authToken="+localStorage.getItem("auth_token");
+                location.href = mainUrl+url;
             }
     </script>
     </head>
@@ -94,39 +114,33 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        {% if session['auth_token']%}
-                            {% if session['role'] == "USER" %}
-                                <div class="dropdown">
+                                <div class="dropdown" id="normal" style="display: none">
                                     <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown">Welcome!
                                     <span class="caret"></span></button>
                                     <ul class="dropdown-menu">
-                                      <li><a href='/userProfile'>Profile</a></li>
-                                        <li><a href="/productSearch">Shop Now</a></li>
+                                       <li><a href="/merchantLogin">Merchant</a></li>
+                                        <li><a href="/userLogin">User</a></li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown" id="user" style="display: none">
+                                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown">Welcome!
+                                    <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                      <li><a href='javascript:sendAuthToken("/userProfile")'>Profile</a></li>
+                                        <li><a href='javascript:sendAuthToken("/productSearch")'>Shop Now</a></li>
                                         <li><a onclick='userLogout()' href="$">Log Out</a></li>
                                     </ul>
                                 </div>
-                            {% elif session['role'] == "MERCHANT" %}
-                                <div class="dropdown">
+                                <div class="dropdown" id="merchant" style="display: none">
                                     <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown">Welcome!
                                     <span class="caret"></span></button>
                                     <ul class="dropdown-menu">
-                                      <li><a href='/merchantProfile'>Profile</a></li>
-                                        <li><a href="/addProduct">Add Item</a></li>
+                                      <li><a href='javascript:sendAuthToken("/merchantProfile")'>Profile</a></li>
+                                        <li><a href='javascript:sendAuthToken("/addProduct")'>Add Item</a></li>
                                         <li><a onclick='merchantLogout()' href="$">Log Out</a></li>
                                     </ul>
                                 </div>
-                            {% endif %}
 
-                        {% else %}
-                            <div class="dropdown">
-                                <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown">Login
-                                <span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                  <li><a href="/merchantLogin">Merchant</a></li>
-                                  <li><a href="/userLogin">User</a></li>
-                                </ul>
-                            </div>
-                        {% endif %}
                     </ul>
                 </div>
             </div>
