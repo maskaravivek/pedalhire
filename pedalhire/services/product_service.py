@@ -1,11 +1,11 @@
 from ..models.base import db
 from ..models.products import Products
+from ..models.orders import Orders
 from ..models.product_status import ProductStatus
+from ..models.order_status import OrderStatus
 import uuid
-from .login_service import register, login
 from ..services import memcache_service
 from .login_service import login
-import json
 
 
 def create_product(data, merchant_id):

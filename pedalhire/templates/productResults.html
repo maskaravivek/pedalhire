@@ -70,6 +70,43 @@
               }
             }
         </style>
+        <script>
+            function purchaseProduct() {
+            event.preventDefault();
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const startDateTime = urlParams.get('startDate')
+            const endDateTime = urlParams.get('endDate')
+            const url = "/api/v1/purchaseProduct";
+            var id = $('#id-data').data();
+            const data = {
+                "id": id['name'],
+                "startDateTime": startDateTime,
+                "endDateTime": endDateTime
+            };
+            const other_params = {
+                headers: { "content-type": "application/json; charset=UTF-8", "token": localStorage.getItem("auth_token") },
+                body: JSON.stringify(data),
+                method: "POST",
+                mode: "cors"
+            };
+
+            fetch(url, other_params)
+                .then(function (response) {
+                    if (response.ok) {
+                        return response;
+                    } else {
+                        throw new Error("Could not reach the API: " + response.statusText);
+                    }
+                }).then(function (data) {
+                    window.alert("Successfully Booked");
+                    window.location.replace("/");
+                }).catch(function (error) {
+                    console.log(error.message)
+                });
+            return true;
+            }
+        </script>
     </head>
     <body>
         {% for items in response %}
@@ -80,7 +117,7 @@
                       <h1 class="xlarge-font"><b>{{ items['name'] }}</b></h1>
                       <h3 class="large-font" style="color:MediumSeaGreen;"><b>Distance : {{'%0.2f'| format(items['distance']|float)}}km</b></h3>
                       <h3>{{ items['description'] }}</h3>
-                      <button class="button">Buy</button>
+                      <button onclick="purchaseProduct()" class="button">Buy</button>
                     </div>
                     <div class="column-33">
                         <img src="/static/img/cycling_background.jpg" width="435" height="371">
@@ -98,7 +135,8 @@
                       <h1 class="xlarge-font"><b>{{ items['name'] }}</b></h1>
                       <h3 class="large-font" style="color:MediumSeaGreen;"><b>Distance : {{'%0.2f'| format(items['distance']|float)}} km</b></h3>
                       <h3>{{ items['description'] }}</h3>
-                      <button class="button">Buy</button>
+                        <meta id="id-data" data-name="{{ items['id'] }}">
+                      <button onclick="purchaseProduct()" class="button">Buy</button>
                     </div>
                   </div>
                 </div>
