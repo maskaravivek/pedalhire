@@ -20,3 +20,5 @@ class Products(db.Model, CustomSerializerMixin):
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     schedules = db.relationship('Schedule', backref='products')
     orders = db.relationship('Orders', backref='products')
+
+
