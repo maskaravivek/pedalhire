@@ -2,6 +2,9 @@ runtime: python37
 
 instance_class: F1
 
+vpc_access_connector:
+  name: projects/cse546-group17/locations/us-central1/connectors/cse546-memcache-con
+
 env_variables:
   BUCKET_NAME: "example-gcs-bucket"
   SECRET_KEY: "$$key"
@@ -15,7 +18,7 @@ env_variables:
   PROJECT_ID: "cse546-group17"
   LOCATION: "us-central1"
   GOOGLE_CLOUD_BUCKET: "pedalhire"
-  REDISHOST: '10.248.58.227'
+  REDISHOST: '10.77.29.211'
   REDISPORT: '6379'
 
 automatic_scaling:
