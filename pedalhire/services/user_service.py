@@ -60,7 +60,7 @@ def get_all_users():
 
 def get_user_by_id(**kwargs):
     prefix = "u_"
-    if kwargs['id'] is not None:
+    if 'id' in kwargs:
        key = prefix + str(kwargs['id'])
        exist , value = memcache_service.cache_get(key)
        if  exist :
@@ -73,11 +73,7 @@ def get_user_by_id(**kwargs):
        return get_user_data(**kwargs).to_dict()  
 
 def get_user_data(**kwargs):
-    prefix = "u_"
     value = get_user_query(**kwargs).first_or_404()
-    if value['id'] is not None:
-       key = prefix + str(value['id'])
-       memcache_service.cache_put(key, value)
     return value 
 
 
