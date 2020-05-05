@@ -110,13 +110,13 @@
     </head>
     <body>
         {% for items in response %}
-            {% if loop.index%2 == 1 %}
                 <div style="margin-top:50px; margin-bottom:100px;" class="container">
                   <div class="row">
                     <div class="column-66">
                       <h1 class="xlarge-font"><b>{{ items['name'] }}</b></h1>
                       <h3 class="large-font" style="color:MediumSeaGreen;"><b>Distance : {{'%0.2f'| format(items['distance']|float)}}km</b></h3>
                       <h3>{{ items['description'] }}</h3>
+                        <meta id="id-data" data-name="{{ items['id'] }}">
                       <button onclick="purchaseProduct()" class="button">Buy</button>
                     </div>
                     <div class="column-33">
@@ -124,23 +124,6 @@
                     </div>
                   </div>
                 </div>
-            {% endif %}
-            {% if loop.index%2 == 0 %}
-                <div class="container" style="margin-bottom:100px;">
-                  <div class="row">
-                    <div class="column-33">
-                      <img src="/static/img/cycling_background.jpg" width="335" height="371">
-                    </div>
-                    <div class="column-66">
-                      <h1 class="xlarge-font"><b>{{ items['name'] }}</b></h1>
-                      <h3 class="large-font" style="color:MediumSeaGreen;"><b>Distance : {{'%0.2f'| format(items['distance']|float)}} km</b></h3>
-                      <h3>{{ items['description'] }}</h3>
-                        <meta id="id-data" data-name="{{ items['id'] }}">
-                      <button onclick="purchaseProduct()" class="button">Buy</button>
-                    </div>
-                  </div>
-                </div>
-            {% endif %}
         {% endfor %}
     </body>
 </html>
