@@ -3,6 +3,7 @@ from ..models.orders import Orders
 from ..models.order_status import OrderStatus
 import uuid
 
+
 def complete_purchase(productId, startDateTime, endDateTime, userId):
     try:
         order_id = uuid.uuid4()
@@ -22,11 +23,14 @@ def complete_purchase(productId, startDateTime, endDateTime, userId):
 
 
 def get_order_by_id(**kwargs):
-    return get_order_data(**kwargs).to_dict()
+    if get_order_data(**kwargs) is not None:
+        return get_order_data(**kwargs).to_dict()
+    else:
+        return None
 
 
 def get_order_data(**kwargs):
-    return get_order_query(**kwargs).first_or_404()
+    return get_order_query(**kwargs).first()
 
 
 def get_order_query(**kwargs):

@@ -22,11 +22,15 @@
         <div class="cover-container">
 
           <div class="inner cover">
+              {% if response %}
                 <h1 class="cover-heading">Order Details</h1>
                 <p class="lead">Product Name : {{ response['products']['name'] }}</p>
                 <p class="lead">Product Description : {{ response['products']['description'] }}</p>
                 <p class="lead">Order Duration : {{ response['start_date'] }} - {{ response['end_date'] }}</p>
                  <p class="lead">Status : {{ response['order_status'] }}</p>
+              {% else %}
+                <h1 class="cover-heading">No Orders!</h1>
+              {% endif %}
           </div>
 
         </div>
