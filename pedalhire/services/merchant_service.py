@@ -107,7 +107,7 @@ def add_product(data, login_id):
                            description=data['description'],
                            merchant_id=merchant_details['id'],
                            price=data['price'],
-                           product_photo="No photo!",
+                           product_photo=data['file_link'],
                            status=ProductStatus.AVAILABLE)
         db.session.add(product)
         schedule_id = uuid.uuid4()

@@ -31,7 +31,21 @@ def authenticate(f):
                     kwargs['auth_token'] = auth_token
                 return f(*args, **kwargs)
             except ValueError as err:
-                print('Error2')
+                responseObject = {
+                    'status': 'fail',
+                    'message': str(err)
+                }
+                return render_template('index.html')
+        elif request.form['loginId']:
+            try:
+                auth_token = request.form['loginId']
+                if auth_token != 'null':
+                    login_id, role = Login.decode_auth_token(auth_token)
+                    kwargs['login_id'] = login_id
+                    kwargs['role'] = role
+                    kwargs['auth_token'] = auth_token
+                return f(*args, **kwargs)
+            except ValueError as err:
                 responseObject = {
                     'status': 'fail',
                     'message': str(err)

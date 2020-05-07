@@ -1,8 +1,11 @@
-from flask import Blueprint, request, abort, session
+from flask import Blueprint, request, abort, redirect, url_for
 from .authenticate import authenticate
 from ..constants.global_constants import COMMON_PREFIX
 from ..services import merchant_service
 from ..utils.api import handle_response
+from ..services.upload_service import upload_blob
+import os
+import uuid
 
 merchant_api = Blueprint('merchant_api', __name__)
 
@@ -36,14 +39,28 @@ def logout_merchant_api(*args, **kwargs):
     return handle_response({})
 
 
-@merchant_api.route(COMMON_PREFIX + "/addProduct", methods=['POST'])
+@merchant_api.route(COMMON_PREFIX + '/addPhoto', methods=['GET', 'POST'])
 @authenticate
-def add_product(*args, **kwargs):
-    print(kwargs)
+def add_photo(*args, **kwargs):
     if kwargs['role'] == 'MERCHANT':
-        data = request.json
-        response = merchant_service.add_product(data, kwargs['login_id'])
-        return handle_response(response)
+        print(request.form)
+        image = request.files['img']
+        image.save(os.path.join('/tmp', image.filename))
+        file_name = str(uuid.uuid4())
+
+        file_link = 'https://storage.cloud.google.com/pedalhire/{}'.format(
+            file_name)
+        upload_blob('/tmp/' + image.filename, file_name)
+        responseObject = {
+            'name': request.form['name'],
+            'description': request.form['description'],
+            'price': request.form['price'],
+            'startDateTime': request.form['startDateTime'],
+            'endDateTime': request.form['endDateTime'],
+            'file_link': file_link
+        }
+        response = merchant_service.add_product(responseObject, kwargs['login_id'])
+        return redirect(url_for('Main Page.get_root_view'))
     else:
         responseObject = {
             'status': 'fail',
