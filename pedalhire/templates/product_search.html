@@ -1,112 +1,187 @@
 {% extends 'base.html' %}
 {% block content %}
 <html>
-    <head>
-        <link rel="stylesheet" href="/static/css/cover.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<head>
+    <link rel="stylesheet" href="/static/css/cover.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkF1YNfrj3tFx9-tgssMblWzybWIMUgyE&v=3.exp&sensor=false&libraries=places"></script>
-        <title>PedalHire</title>
-        <style>
-            body {
-                background-color: black;
-                background-size: cover;
-                -webkit-background-size: cover;
-                -moz-background-size: cover;*/
-            }
-            .form-signin {
-                color: white;
-            }
-            .bootstrap-datetimepicker-widget.dropdown-menu {
-                background-color: #30363b;
-                border-color: #2b3135;
-                width: 100%;
-            }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-            .buttonLink {
-                color:black;
-            }
-        </style>
-        <script>
-            $(document).ready(function(){
-                $("#startDate").datetimepicker({
-                    format: 'YYYY-MM-DD hh:mm'
-                });
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkF1YNfrj3tFx9-tgssMblWzybWIMUgyE&v=3.exp&sensor=false&libraries=places"></script>
+    <title>PedalHire</title>
+    <style>
+        body {
+            background-color: black;
+            background-size: cover;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            */
+        }
+
+        .form-signin {
+            color: white;
+        }
+
+        .bootstrap-datetimepicker-widget.dropdown-menu {
+            background-color: #30363b;
+            border-color: #2b3135;
+            width: 100%;
+        }
+
+        .buttonLink {
+            color: black;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#startDate").datetimepicker({
+                format: 'YYYY-MM-DD hh:mm'
             });
-            $(document).ready(function(){
-                $("#endDate").datetimepicker({
-                    format: 'YYYY-MM-DD hh:mm'
-                });
+        });
+        $(document).ready(function () {
+            $("#endDate").datetimepicker({
+                format: 'YYYY-MM-DD hh:mm'
             });
-            function initialize() {
-              var input = document.getElementById('location');
-              var autocomplete = new google.maps.places.Autocomplete(input);
-              google.maps.event.addListener(autocomplete, 'place_changed', function () {
-                    var place = autocomplete.getPlace();
-                    document.getElementById('location').value = place.name;
-                    document.getElementById('latitude').value = place.geometry.location.lat();
-                    document.getElementById('longitude').value = place.geometry.location.lng();
-              });
+        });
+        function initialize() {
+            var input = document.getElementById('location');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                var place = autocomplete.getPlace();
+                document.getElementById('location').value = place.name;
+                document.getElementById('latitude').value = place.geometry.location.lat();
+                document.getElementById('longitude').value = place.geometry.location.lng();
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+        function openPage() {
+            var startDateTime = document.getElementById('startDateTime').value;
+            var endDateTime = document.getElementById('endDateTime').value;
+            var latitude = document.getElementById('latitude').value;
+            var longitude = document.getElementById('longitude').value;
+            var url = "?authToken=" + localStorage.getItem("auth_token") + "&startDate=" + startDateTime + "&endDate=" + endDateTime + "&latitude=" + latitude + "&longitude=" + longitude;
+            location.href = "/productResults" + url;
+        }
+        function setTodayDate() {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+
+            document.getElementById("startDateTime").defaultValue = yyyy + '-' + mm + '-' + dd + ' 12:00';
+        }
+        function setDayAfterTomorrowDate() {
+            var date = new Date();
+            var today = new Date(date.getTime() + 2 * 24 * 60 * 60 * 1000);
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+
+            document.getElementById("endDateTime").defaultValue = yyyy + '-' + mm + '-' + dd + ' 12:00';
+        }
+        function setCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    console.log(position)
+                    var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + position.coords.latitude + ',' + position.coords.longitude + '&sensor=false' + '&key=AIzaSyCkF1YNfrj3tFx9-tgssMblWzybWIMUgyE'
+                    fetch(url)
+                        .then(function (response) {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error("Could not reach the API: " + response.statusText);
+                            }
+                        }).then(function (data) {
+                            results = data['results'];
+                            if (results[1]) {
+                                for (var i = 0; i < results.length; i++) {
+                                    if (results[i].types[0] === "locality") {
+                                        var city = results[i].address_components[0].short_name;
+                                        var state = results[i].address_components[2].short_name;
+                                        document.getElementById('location').value = city;
+                                        document.getElementById('latitude').value = position.coords.latitude;
+                                        document.getElementById('longitude').value = position.coords.longitude;
+                                        break;
+                                    }
+                                }
+                            }
+                        }).catch(function (error) {
+                            console.log(error.message)
+                        });
+
+                }, function () {
+                    console.log('location not found')
+                });
             }
-            google.maps.event.addDomListener(window, 'load', initialize);
+        }
+        function initDefaultValues() {
+            setTodayDate();
+            setDayAfterTomorrowDate();
+            setCurrentLocation();
+        }
+    </script>
+</head>
 
-            function openPage() {
-                var startDateTime = document.getElementById('startDateTime').value;
-                var endDateTime = document.getElementById('endDateTime').value;
-                var latitude = document.getElementById('latitude').value;
-                var longitude = document.getElementById('longitude').value;
-                var url = "?authToken="+localStorage.getItem("auth_token")+"&startDate="+startDateTime+"&endDate="+endDateTime+"&latitude="+latitude+"&longitude="+longitude;
-                location.href = "/productResults"+url;
-            }
-        </script>
-    </head>
-    <body>
-        <div class="site-wrapper">
+<body>
+    <div class="site-wrapper">
 
-          <div class="site-wrapper-inner">
+        <div class="site-wrapper-inner">
 
-                <form method="POST">
-                        <div class="text-center">
-                            <h2 class="form-signin-heading">Where are you off to today?</h2>
+            <form method="POST">
+                <div class="text-center">
+                    <h2 class="form-signin-heading">Where are you off to today?</h2>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-4">
+                        <div class='input-group date' id='startDate'>
+                            <input type='text' id="startDateTime" value="javascript:getTodayDate()"
+                                class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-xs-4">
-                                <div class='input-group date' id='startDate'>
-                                    <input type='text' id="startDateTime" class="form-control" />
-                                    <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group col-xs-4">
+                    </div>
+                    <div class="form-group col-xs-4">
 
-                                <div class='input-group date' id='endDate'>
-                                    <input type='text' id="endDateTime" class="form-control" />
-                                    <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group col-xs-4">
-                                <input type="text" name="location" id="location" class="form-control" placeholder="Location" required />
-                                <input type="hidden" name="latitude" id="latitude" class="form-control" placeholder="Latitude" required />
-                                <input type="hidden" name="longitude" id="longitude" class="form-control" placeholder="Longitude" required />
-                            </div>
+                        <div class='input-group date' id='endDate'>
+                            <input type='text' id="endDateTime" value="javascript:dayAfterTomorrowDate()"
+                                class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
                         </div>
-                        <div class="text-center">
+                    </div>
+                    <div class="form-group col-xs-4">
+                        <input type="text" name="location" id="location" class="form-control" placeholder="Location"
+                            required />
+                        <input type="hidden" name="latitude" id="latitude" class="form-control" placeholder="Latitude"
+                            required />
+                        <input type="hidden" name="longitude" id="longitude" class="form-control"
+                            placeholder="Longitude" required />
+                    </div>
+                </div>
+                <div class="text-center">
 
-                            <a class = 'buttonLink' id="submit" href="javascript:openPage()"><button class="btn btn-default" type="button">Lets go!</button></a>
+                    <a class='buttonLink' id="submit" href="javascript:openPage()"><button class="btn btn-default"
+                            type="button">Lets go!</button></a>
 
-                        </div>
-                </form>
-
-          </div>
+                </div>
+            </form>
 
         </div>
-    </body>
+
+    </div>
+    <script>
+        initDefaultValues();
+    </script>
+</body>
+
 </html>
 {% endblock %}
