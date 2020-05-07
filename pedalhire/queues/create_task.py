@@ -13,13 +13,13 @@ def create_task(payload=None, in_seconds=None):
     client = tasks_v2.CloudTasksClient()
 
     # Construct the fully qualified queue name.
-    parent = client.queue_path('cse546-group17', 'us-central1', 'pedalhire-reporting-queue')
+    parent = client.queue_path('cse546-group17', 'us-central1', 'pedalhire-broadcast-queue')
 
     # Construct the request body.
     task = {
         'app_engine_http_request': {  # Specify the type of request.
             'http_method': 'POST',
-            'relative_uri': '/api/v1/generateReport'
+            'relative_uri': '/api/v1/broadcastEmails'
         }
     }
     if payload is not None:
