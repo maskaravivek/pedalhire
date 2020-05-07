@@ -36,7 +36,7 @@ def authenticate(f):
                     'message': str(err)
                 }
                 return render_template('index.html')
-        elif request.form['loginId']:
+        elif request.form.get('loginId'):
             try:
                 auth_token = request.form['loginId']
                 if auth_token != 'null':
