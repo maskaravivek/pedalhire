@@ -100,7 +100,7 @@
                     </div>
                     <form class="form-signin" action="/api/v1/addProduct" method="POST" enctype="multipart/form-data">
                         <img id="output" style="border: 10px;  solid white; border-radius: 50%; background:white;" width="235" height="151"/>
-                        <input class="form-group col-xs-12" type="file" name="img" id="img" accept="image/*" onchange="loadFile(event)">
+                        <input class="form-group col-xs-12" type="file" name="img" id="img" accept="image/*" onchange="loadFile(event)" required >
                             <div class="row">
                             <div class="form-group col-xs-12">
                                 <input type="name" id="name" name="name" class="form-control" placeholder="Name"
@@ -138,7 +138,7 @@
                             </div>
                             <input type="hidden" id="loginId" name="loginId" value={{ request.args.get('authToken') }}>
                         </div>
-                        <input type="submit" id="upload" value="Upload">
+                        <input class="btn btn-default" type="submit" id="upload" value="Add">
                     </form>
                 </div>
 

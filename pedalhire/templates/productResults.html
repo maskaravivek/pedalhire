@@ -120,7 +120,11 @@
                       <button onclick="purchaseProduct()" class="button">Buy</button>
                     </div>
                     <div class="column-33">
-                        <img src="/static/img/cycling_background.jpg" width="235" height="151">
+                        {% if items['product_photo'] != '' %}
+                            <img src={{ items['product_photo'] }} width="235" height="171">
+                        {% else %}
+                            <img src="/static/img/no_img.png" width="235" height="171">
+                        {% endif %}
                     </div>
                   </div>
                 </div>

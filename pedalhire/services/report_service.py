@@ -4,6 +4,7 @@ from .email_service import send_email_with_template
 from ..utils.json_to_csv import convert_json_to_csv
 from .upload_service import upload_blob
 import uuid
+from ..constants.env_constants import GOOGLE_CLOUD_BUCKET
 
 
 def generate_status_report():
@@ -18,7 +19,7 @@ def generate_status_report():
         print(product_status_json)
         report_file_name = str(uuid.uuid4()) + '.csv'
         convert_json_to_csv('products', product_status_json, '/tmp/' + report_file_name)
-        upload_blob('/tmp/' + report_file_name, report_file_name)
+        upload_blob('/tmp/' + report_file_name, report_file_name, GOOGLE_CLOUD_BUCKET)
 
         report_link = 'https://storage.cloud.google.com/pedalhire/{}'.format(
             report_file_name)

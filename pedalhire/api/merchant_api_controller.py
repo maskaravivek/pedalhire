@@ -39,18 +39,18 @@ def logout_merchant_api(*args, **kwargs):
     return handle_response({})
 
 
-@merchant_api.route(COMMON_PREFIX + '/addPhoto', methods=['GET', 'POST'])
+@merchant_api.route(COMMON_PREFIX + '/addProduct', methods=['POST'])
 @authenticate
 def add_photo(*args, **kwargs):
     if kwargs['role'] == 'MERCHANT':
         print(request.form)
         image = request.files['img']
         image.save(os.path.join('/tmp', image.filename))
-        file_name = str(uuid.uuid4())
+        file_name = str(uuid.uuid4()) + '.jpg'
 
-        file_link = 'https://storage.cloud.google.com/pedalhire/{}'.format(
+        file_link = 'https://storage.cloud.google.com/images-pedalhire/{}'.format(
             file_name)
-        upload_blob('/tmp/' + image.filename, file_name)
+        upload_blob('/tmp/' + image.filename, file_name, 'images-pedalhire')
         responseObject = {
             'name': request.form['name'],
             'description': request.form['description'],
