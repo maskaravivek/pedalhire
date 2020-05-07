@@ -27,7 +27,7 @@ def update_user_api(*args, **kwargs):
 @authenticate
 def search_products(*args, **kwargs):
     data = request.json
-    response = product_service.product_search(data['latitude'], data['longitude'], data['startDate'], data['endDate'])
+    response, locations = product_service.product_search(data['latitude'], data['longitude'], data['startDate'], data['endDate'])
     return handle_response(response)
 
 

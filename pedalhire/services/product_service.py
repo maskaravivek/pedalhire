@@ -56,6 +56,7 @@ def product_search(latitude, longitude, start_date, end_date):
    else :   
     result = db.engine.execute("SELECT p.*, s.start_date, s.end_date FROM schedule s INNER JOIN(SELECT p.*, m.distance, m.latitude, m.longitude FROM products p INNER JOIN(SELECT id, latitude, longitude, distance FROM (SELECT merchants.*, calculate_distance(merchants.latitude::numeric, merchants.longitude::numeric, {}, {}, 'K') distance FROM merchants) as m WHERE distance < 7000) m ON m.id = p.merchant_id) p ON (s.product_id = p.id) WHERE s.start_date <= '{}'::date AND s.end_date >= '{}'::date AND NOT EXISTS(SELECT * FROM orders WHERE orders.end_date >= '{}'::date AND orders.end_date <='{}'::date AND orders.product_id = p.id)".format(latitude, longitude, start_date, end_date, start_date, end_date))
     products = []
+    locations = []
     for row in result:
         product = {
             "id": row.id,
@@ -70,12 +71,17 @@ def product_search(latitude, longitude, start_date, end_date):
             "start_date": row.start_date,
             "end_date": row.end_date
         }
+        location = {
+            "lat": float(row.latitude),
+            "lng": float(row.longitude),
+        }
         print(product, flush = True)
         key = prefix + str(row.latitude)+"_"+str(row.longitude)+"_"+str(row.start_date)+"_"+str(row.end_date)
         memcache_service.cache_put_list(key, product)
         products.append(product)
+        locations.append(location)
     
-    return products 
+    return products, locations
 
   
 def get_all_products():

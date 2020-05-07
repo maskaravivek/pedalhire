@@ -18,6 +18,6 @@ def display_merchant(*args, **kwargs):
 @product_view.route("/productResults", methods=['GET'])
 @authenticate
 def product_results(*args, **kwargs):
-    response = product_service.product_search(request.args.get('latitude'), request.args.get('longitude'),
+    response, locations = product_service.product_search(request.args.get('latitude'), request.args.get('longitude'),
                                               request.args.get('startDate'), request.args.get('endDate'))
-    return render_template('productResults.html', response=response)
+    return render_template('productResults.html', response=response, locations=locations)
