@@ -127,52 +127,45 @@
     });
     for (i = 0; i < locations.length; i++) {
       position = locations[i];
-      console.log(response[i]['description']);
       var marker = new google.maps.Marker({ position: position, map: map });
-      var data = response[i];
-      console.log(data)
 
       var infowindow = new google.maps.InfoWindow();
 
-      var show_proposal_link = '<a href="/productDetails">' + response[0]['name'] + '</a><p>' + response[0]['description'] + '</p>';
+      var show_proposal_link = '<p>' + response[i]['name'] + '</p><p>' + response[i]['description'] + '</p>';
       var contentString = '<div class="card text-center" style="width: 20rem;">' +
         '<div class="card-block">' +
         '<h4 class="card-title">' + show_proposal_link + '</h4>' +
         '</div>' +
         '</div>';
 
-      (function (marker, content, infowindow) {
-        google.maps.event.addListener(marker, 'mouseover', function () {
-          infowindow.setContent(content);
-          infowindow.open(map, marker);
-        });
-      })(marker, contentString, infowindow);
-    }
+       google.maps.event.addListener(marker,'mouseover', (function(marker,content,infowindow){
+        return function() {
+           infowindow.setContent(content);
+           infowindow.open(map,marker);
+        };
+        })(marker,contentString,infowindow));
+          google.maps.event.addListener(marker, 'mouseout', (function(marker,content,infowindow){
+            return function() {
+               infowindow.close();
+            };
+        })(marker,contentString,infowindow));
+        google.maps.event.addListener(marker, 'click', (function(marker,content,infowindow){
+            return function() {
+               document.getElementById("name").innerHTML = content['name'];
+               document.getElementById("distance").innerHTML = content['distance'].toFixed(2) + ' km';
+               document.getElementById("description").innerHTML = content['description'];
 
-    (function (marker, content, infowindow) {
-      google.maps.event.addListener(marker, 'mouseout', function () {
-        infowindow.close();
-      });
-    })(marker, contentString, infowindow);
+               $("#id-data").attr('data-name', content['id']);
 
-    (function (marker, content, infowindow) {
-      google.maps.event.addListener(marker, 'click', function () {
-        console.log(data)
-        document.getElementById("name").innerHTML = data['name'];
-        document.getElementById("distance").innerHTML = data['distance'].toFixed(2) + ' km';
-        document.getElementById("description").innerHTML = data['description'];
+               if (content['product_photo'] !== '' && content['product_photo'] !== 'No photo!') {
+                 $("#photo").attr("src", content['product_photo']);
+               }
 
-        $("#id-data").attr('data-name', data['id']);
-
-        console.log(data['product_photo'])
-        if (data['product_photo'] !== '' && data['product_photo'] !== 'No photo!') {
-          $("#photo").attr("src", data['product_photo']);
+               $('#info-container').css('display', 'block');
+               window.scrollTo(0, document.body.scrollHeight);
+             };
+        })(marker,response[i],infowindow));
         }
-
-        $('#info-container').css('display', 'block');
-        window.scrollTo(0, document.body.scrollHeight);
-      });
-    })(marker, data, infowindow);
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
@@ -195,7 +188,7 @@
 </head>
 
 <body>
-  <div id="map"></div>
+  <div id="map" style="color: black; font-family: "Courier New", Courier, monospace"></div>
   <meta id="locationData" data-loc="{{locations}}">
   <meta id="responseData" data-loc="{{response}}">
   <div style="margin-top:50px; margin-bottom:100px; display:none;" class="container" id="info-container">

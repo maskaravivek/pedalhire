@@ -27,6 +27,19 @@
             var autocomplete = new google.maps.places.Autocomplete(input);
             google.maps.event.addListener(autocomplete, 'place_changed', function () {
                 var place = autocomplete.getPlace();
+                for (var i = 0; i < place.address_components.length; i++) {
+                  for (var j = 0; j < place.address_components[i].types.length; j++) {
+                    if (place.address_components[i].types[j] == "country") {
+                      document.getElementById('country').value = place.address_components[i].long_name;
+                    }
+                    if (place.address_components[i].types[j] == "locality") {
+                      document.getElementById('city').value = place.address_components[i].long_name;
+                    }
+                    if (place.address_components[i].types[j] == "administrative_area_level_1") {
+                      document.getElementById('state').value = place.address_components[i].long_name;
+                    }
+                  }
+                }
                 document.getElementById('address').value = place.name;
                 document.getElementById('latitude').value = place.geometry.location.lat();
                 document.getElementById('longitude').value = place.geometry.location.lng();
@@ -339,9 +352,9 @@
                                 <input type="text" id="address" name="address" class="form-control"
                                     placeholder="Address" required />
                                 <input type="hidden" id="latitude" name="latitude" id="latitude" class="form-control"
-                                    placeholder="Latitude" required />
+                                    placeholder="Latitude" value="33.4177504" />
                                 <input type="hidden" id="longitude" name="longitude" id="longitude" class="form-control"
-                                    placeholder="Longitude" required />
+                                    placeholder="Longitude" value="-111.9343817" />
                             </div>
                         </div>
                         <div class="row">
