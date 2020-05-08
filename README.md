@@ -25,6 +25,12 @@ gcloud app deploy
 
 Deployment URL: https://cse546-group17.uc.r.appspot.com/
 
+## Creating a queue
+
+```
+gcloud app deploy queue.yaml
+```
+
 ## Creating a task
 
 ```
