@@ -1,4 +1,4 @@
-from . import models, api, services, tests
+from . import models, api, services
 from flask import Flask, make_response, jsonify
 from flask_cors import CORS
 from os.path import join, isfile
@@ -33,5 +33,4 @@ CORS(app)
 models.init_app(app)
 api.init_app(app)
 services.init_app(app)
-tests.init_app(app)
 cache.init_app(app)

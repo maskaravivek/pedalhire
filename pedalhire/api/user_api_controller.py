@@ -14,15 +14,6 @@ def create_user_api(*args, **kwargs):
     return handle_response(response['auth_token'])
 
 
-@user_api.route(COMMON_PREFIX + "/products", methods=['POST'])
-@authenticate
-def search_products(*args, **kwargs):
-    data = request.json
-    response, locations = product_service.product_search(data['latitude'], data['longitude'], data['startDate'],
-                                                         data['endDate'])
-    return handle_response(response)
-
-
 @user_api.route(COMMON_PREFIX + "/userLogin", methods=['POST'])
 def login_user_api(*args, **kwargs):
     data = request.json
