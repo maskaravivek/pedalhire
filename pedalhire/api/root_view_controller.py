@@ -29,4 +29,4 @@ def retrieve_role(*args, **kwargs):
 @root_view.route("/productSearch", methods=['GET'])
 @authenticate
 def product_search(*args, **kwargs):
-    return render_template("product_search.html")
+    return render_template("productSearch.html")

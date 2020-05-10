@@ -22,7 +22,7 @@ redis_client = redis.Redis(host=redis_host, port=redis_port)
 
 
 def cache_put(key, data):
-    if is_redis_available() == False:
+    if not is_redis_available():
         return
     key = str(key)
     check = redis_client.set(key, json.dumps(data, cls=UUIDEncoder))
@@ -39,7 +39,6 @@ def is_redis_available():
         return True
     except redis.exceptions.ConnectionError as r_con_error:
         return False
-        print('Redis connection error')
 
 
 def cache_get(key):
@@ -61,7 +60,7 @@ def cache_delete(key):
 
 def cache_put_list(key, data):
     key = str(key)
-    if is_redis_available() == False:
+    if not is_redis_available():
         return
     print(key, flush=True)
     check = redis_client.lpush(key, json.dumps(data, cls=UUIDEncoder))
@@ -72,7 +71,7 @@ def cache_put_list(key, data):
 
 
 def cache_get_list(key):
-    if is_redis_available() == False:
+    if not is_redis_available():
         return []
     key = str(key)
     l = redis_client.llen(key)
@@ -89,5 +88,5 @@ def cache_get_list(key):
         datetime1 = parse(str1)
         value['end_date'] = datetime1
         list1.append(value)
-        i = i+1
+        i = i + 1
     return list1
