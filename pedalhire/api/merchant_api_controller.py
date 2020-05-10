@@ -17,15 +17,6 @@ def create_merchant_api(*args, **kwargs):
     return handle_response(response['auth_token'])
 
 
-@merchant_api.route(COMMON_PREFIX + "/merchant", methods=['PUT'])
-@authenticate
-def update_merchant_api(*args, **kwargs):
-    abort(404)
-    data = request.json
-    response = merchant_service.update_merchant(data)
-    return handle_response(response)
-
-
 @merchant_api.route(COMMON_PREFIX + "/merchantLogin", methods=['POST'])
 def login_merchant_api(*args, **kwargs):
     data = request.json
@@ -41,7 +32,7 @@ def logout_merchant_api(*args, **kwargs):
 
 @merchant_api.route(COMMON_PREFIX + '/addProduct', methods=['POST'])
 @authenticate
-def add_photo(*args, **kwargs):
+def add_product(*args, **kwargs):
     if kwargs['role'] == 'MERCHANT':
         print(request.form)
         image = request.files['img']
