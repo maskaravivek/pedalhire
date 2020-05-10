@@ -1,27 +1,34 @@
 from ..models.base import db
 from ..models.products import Products
-from ..models.orders import Orders
 from ..models.product_status import ProductStatus
-from ..models.order_status import OrderStatus
 import uuid
 from ..services import memcache_service
 from .login_service import login
+from ..services import merchant_service
+from ..models.schedule import Schedule
 
 
-def create_product(data, merchant_id):
+def add_product(data, login_id):
     try:
+        merchant_details = merchant_service.get_merchant_by_id(login_id=login_id)
         product_id = uuid.uuid4()
         product = Products(id=product_id,
                            name=data['name'],
                            description=data['description'],
-                           merchant_id=merchant_id,
+                           merchant_id=merchant_details['id'],
                            price=data['price'],
-                           product_photo='',
+                           product_photo=data['file_link'],
                            status=ProductStatus.AVAILABLE)
         db.session.add(product)
+        schedule_id = uuid.uuid4()
+        schedule = Schedule(id=schedule_id,
+                            product_id=product_id,
+                            start_date=data['startDateTime'],
+                            end_date=data['endDateTime'])
+        db.session.add(schedule)
         db.session.commit()
 
-        return get_product_by_id(id=product_id)
+
     except Exception as e:
         db.session.rollback()
         raise e
@@ -31,33 +38,18 @@ def get_products():
     return Products
 
 
-def login_merchant(data):
-    return login(data)
-
-
-def update_product(update_data):
-    prefix = "p_"
-    product_id = update_data['id']
-    product = get_product_query(id=product_id)
-    del update_data['id']
-    product.update(update_data)
-    db.session.commit()
-    key = prefix + str(product_id)
-    memcache_service.cache_put(key, update_data)
-    return get_product_by_id(id=product_id)
-
-
 def product_search(latitude, longitude, start_date, end_date):
     try:
         prefix = "p_"
-        list_of_products = []
-        key1 = prefix + str(latitude)+"_"+str(longitude) + \
-            "_"+str(start_date)+":00_"+str(end_date)+":00"
+        key1 = prefix + str(latitude) + "_" + str(longitude) + \
+               "_" + str(start_date) + ":00_" + str(end_date) + ":00"
         list_of_products = memcache_service.cache_get_list(key1)
         if len(list_of_products) > 0:
             return list_of_products
         else:
-            result = db.engine.execute("SELECT p.*, s.start_date, s.end_date FROM schedule s INNER JOIN(SELECT p.*, m.distance, m.latitude, m.longitude FROM products p INNER JOIN(SELECT id, latitude, longitude, distance FROM (SELECT merchants.*, calculate_distance(merchants.latitude::numeric, merchants.longitude::numeric, {}, {}, 'K') distance FROM merchants) as m WHERE distance < 7000) m ON m.id = p.merchant_id) p ON (s.product_id = p.id) WHERE s.start_date <= '{}'::date AND s.end_date >= '{}'::date AND NOT EXISTS(SELECT * FROM orders WHERE orders.end_date >= '{}'::date AND orders.end_date <='{}'::date AND orders.product_id = p.id)".format(latitude, longitude, start_date, end_date, start_date, end_date))
+            result = db.engine.execute(
+                "SELECT p.*, s.start_date, s.end_date FROM schedule s INNER JOIN(SELECT p.*, m.distance, m.latitude, m.longitude FROM products p INNER JOIN(SELECT id, latitude, longitude, distance FROM (SELECT merchants.*, calculate_distance(merchants.latitude::numeric, merchants.longitude::numeric, {}, {}, 'K') distance FROM merchants) as m WHERE distance < 7000) m ON m.id = p.merchant_id) p ON (s.product_id = p.id) WHERE s.start_date <= '{}'::date AND s.end_date >= '{}'::date AND NOT EXISTS(SELECT * FROM orders WHERE orders.end_date >= '{}'::date AND orders.end_date <='{}'::date AND orders.product_id = p.id)".format(
+                    latitude, longitude, start_date, end_date, start_date, end_date))
             products = []
             locations = []
             for row in result:
@@ -79,8 +71,8 @@ def product_search(latitude, longitude, start_date, end_date):
                     "lng": float(row.longitude),
                 }
                 print(product, flush=True)
-                key = prefix + str(row.latitude)+"_"+str(row.longitude) + \
-                    "_"+str(row.start_date)+"_"+str(row.end_date)
+                key = prefix + str(row.latitude) + "_" + str(row.longitude) + \
+                      "_" + str(row.start_date) + "_" + str(row.end_date)
                 memcache_service.cache_put_list(key, product)
                 products.append(product)
                 locations.append(location)

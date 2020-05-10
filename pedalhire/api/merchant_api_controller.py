@@ -1,7 +1,7 @@
-from flask import Blueprint, request, abort, redirect, url_for
+from flask import Blueprint, request, redirect, url_for
 from .authenticate import authenticate
 from ..constants.global_constants import COMMON_PREFIX
-from ..services import merchant_service
+from ..services import merchant_service, product_service
 from ..utils.api import handle_response
 from ..services.upload_service import upload_blob
 import os
@@ -50,7 +50,7 @@ def add_product(*args, **kwargs):
             'endDateTime': request.form['endDateTime'],
             'file_link': file_link
         }
-        response = merchant_service.add_product(responseObject, kwargs['login_id'])
+        response = product_service.add_product(responseObject, kwargs['login_id'])
         return redirect(url_for('Main Page.get_root_view'))
     else:
         responseObject = {

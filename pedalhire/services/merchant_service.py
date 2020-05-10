@@ -3,10 +3,7 @@ from ..models.merchants import Merchants
 from ..models.role import Role
 import uuid
 from .login_service import register, login
-from ..models.product_status import ProductStatus
-from ..models.products import Products
 from ..services import memcache_service
-from ..models.schedule import Schedule
 
 
 def create_merchant(data):
@@ -85,29 +82,3 @@ def get_merchant_data(**kwargs):
 
 def get_merchant_query(**kwargs):
     return Merchants.query.filter_by(**kwargs)
-
-
-def add_product(data, login_id):
-    try:
-        merchant_details = get_merchant_by_id(login_id=login_id)
-        product_id = uuid.uuid4()
-        product = Products(id=product_id,
-                           name=data['name'],
-                           description=data['description'],
-                           merchant_id=merchant_details['id'],
-                           price=data['price'],
-                           product_photo=data['file_link'],
-                           status=ProductStatus.AVAILABLE)
-        db.session.add(product)
-        schedule_id = uuid.uuid4()
-        schedule = Schedule(id=schedule_id,
-                            product_id=product_id,
-                            start_date=data['startDateTime'],
-                            end_date=data['endDateTime'])
-        db.session.add(schedule)
-        db.session.commit()
-
-
-    except Exception as e:
-        db.session.rollback()
-        raise e
