@@ -1,3 +1,12 @@
+## PedalHire
+
+Group Members
+```
+Manikanta Vankayala (1218816326) 
+Rahul Santhosh Kumar Varma (1218475349)
+Vivek Kumar Maskara (1218403147)
+```
+
 #### Setup
 
 ```
