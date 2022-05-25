@@ -10,7 +10,7 @@ Flask-SQLAlchemy==2.4.1
 itsdangerous==1.1.0
 psycopg2-binary==2.8.4
 pycparser==2.20
-PyJWT==1.7.1
+PyJWT==2.4.0
 python-dateutil==2.8.1
 sentry-sdk[flask]==0.14.3
 sendgrid==6.2.1
